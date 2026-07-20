@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Ambient from "@/components/Ambient";
@@ -37,7 +38,10 @@ function RoleRotator() {
   }, [reduced]);
 
   return (
-    <span className="relative inline-flex h-[1.4em] min-w-[16ch] overflow-hidden align-bottom">
+    // min-width must clear the longest role ("Machine Learning Engineer");
+    // the parent's overflow-hidden masks the vertical slide, and would clip
+    // any role wider than this box.
+    <span className="relative inline-flex h-[1.4em] min-w-[28ch] overflow-hidden align-bottom">
       <AnimatePresence mode="wait">
         <motion.span
           key={profile.roles[index]}
@@ -121,13 +125,13 @@ export default function Hero() {
             transition={{ duration: 0.8, ease, delay: 1 }}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
-            <a
-              href="#experience"
+            <Link
+              href="/experience"
               className="group from-accent to-accent-2 relative overflow-hidden rounded-full bg-gradient-to-r px-7 py-3.5 font-mono text-xs tracking-[0.16em] text-white uppercase transition-transform duration-300 hover:scale-[1.03]"
             >
               <span className="from-accent-2 to-accent-3 absolute inset-0 -translate-x-full bg-gradient-to-r transition-transform duration-500 ease-out group-hover:translate-x-0" />
               <span className="relative z-10">View my work</span>
-            </a>
+            </Link>
             <a
               href={`mailto:${profile.email}`}
               className="group border-fg/20 text-fg hover:border-accent/60 hover:text-accent rounded-full border px-7 py-3.5 font-mono text-xs tracking-[0.16em] uppercase transition-colors duration-300"

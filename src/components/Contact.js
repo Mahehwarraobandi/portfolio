@@ -9,7 +9,11 @@ const links = [
     value: profile.phone,
     href: `tel:${profile.phone.replace(/[^\d+]/g, "")}`,
   },
-  { label: "LinkedIn", value: "/in/maheshwarraobandi", href: profile.linkedin },
+  {
+    label: "LinkedIn",
+    value: profile.linkedinHandle,
+    href: profile.linkedin,
+  },
 ];
 
 export default function Contact() {
@@ -24,7 +28,7 @@ export default function Contact() {
       <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
         <Reveal>
           <span className="text-fg/40 font-mono text-xs tracking-[0.24em] uppercase">
-            05 / Contact
+            Get in touch
           </span>
         </Reveal>
 

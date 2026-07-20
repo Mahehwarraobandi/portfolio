@@ -3,18 +3,23 @@ import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { education, skills } from "@/data/resume";
 
-export default function Skills() {
+/** See the note on `Experience` — `showHeading` avoids a duplicate title. */
+export default function Skills({ showHeading = true }) {
   return (
     <section
       id="skills"
-      className="relative mx-auto max-w-7xl scroll-mt-24 px-6 py-28 lg:px-10 lg:py-36"
+      className={`relative mx-auto max-w-7xl scroll-mt-24 px-6 lg:px-10 ${
+        showHeading ? "py-28 lg:py-36" : "pt-8 pb-28 lg:pb-36"
+      }`}
     >
       <Ambient variant="top" />
-      <SectionHeading
-        index="04"
-        title="Capabilities"
-        lead="The stack I build with, end to end."
-      />
+      {showHeading ? (
+        <SectionHeading
+          index="04"
+          title="Capabilities"
+          lead="The stack I build with, end to end."
+        />
+      ) : null}
 
       <div className="border-fg/10 bg-fg/10 grid gap-px overflow-hidden rounded-2xl border sm:grid-cols-2 lg:grid-cols-3">
         {skills.map((group, index) => (

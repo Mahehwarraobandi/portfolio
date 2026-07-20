@@ -80,18 +80,23 @@ function ProjectCard({ project, index }) {
   );
 }
 
-export default function Projects() {
+/** See the note on `Experience` — `showHeading` avoids a duplicate title. */
+export default function Projects({ showHeading = true }) {
   return (
     <section
       id="projects"
-      className="relative mx-auto max-w-7xl scroll-mt-24 px-6 py-28 lg:px-10 lg:py-36"
+      className={`relative mx-auto max-w-7xl scroll-mt-24 px-6 lg:px-10 ${
+        showHeading ? "py-28 lg:py-36" : "pt-8 pb-28 lg:pb-36"
+      }`}
     >
       <Ambient variant="top" />
-      <SectionHeading
-        index="03"
-        title="Selected Projects"
-        lead="Agentic systems and fine-tuned models built end to end."
-      />
+      {showHeading ? (
+        <SectionHeading
+          index="03"
+          title="Selected Projects"
+          lead="Agentic systems and fine-tuned models built end to end."
+        />
+      ) : null}
       <div className="grid gap-6 lg:grid-cols-2">
         {projects.map((project, index) => (
           <ProjectCard key={project.title} project={project} index={index} />

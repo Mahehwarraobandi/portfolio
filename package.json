@@ -11,9 +11,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "generate:assets": "node scripts/generate-assets.mjs",
+    "generate:resume": "node scripts/generate-resume.mjs",
     "check": "npm run lint && npm run format:check && npm run build"
   },
   "dependencies": {
+    "@google-cloud/firestore": "^8.6.0",
     "motion": "^12.42.2",
     "next": "16.2.10",
     "react": "19.2.4",
@@ -24,6 +26,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "eslint-config-prettier": "^10.1.8",
+    "pdfkit": "^0.19.1",
     "prettier": "^3.9.5",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.3",

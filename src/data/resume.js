@@ -10,11 +10,18 @@ export const profile = {
   location: "Kansas, USA",
   phone: "+1 (913) 353-5764",
   email: "maheshwarraobandi@gmail.com",
-  linkedin: "https://www.linkedin.com/in/maheshwarraobandi",
+  linkedin: "https://www.linkedin.com/in/bandi-maheshwar-55987a298",
+  // Display form of the URL above — kept alongside it so the two can't drift.
+  linkedinHandle: "/in/bandi-maheshwar-55987a298",
   summary:
     "AI/ML Engineer and Data Scientist with 5+ years across applied ML, deep learning, and analytics — including 2+ years shipping production Generative AI systems in financial services, logistics, pharmaceuticals, and insurance.",
   summaryLong:
     "Specialized in LLM-powered applications (RAG, agentic workflows, fine-tuning with LoRA/QLoRA), LLM evaluation and observability (Ragas, LangSmith), classical and deep ML (XGBoost, Transformers, CNNs/RNNs, time-series), and multi-cloud MLOps on AWS, Azure, and GCP. Track record of translating ambiguous business problems into measurable outcomes.",
+  // Verbatim "Professional Summary" paragraph from the résumé document, used by
+  // the downloadable PDF so it reproduces the file exactly. The site uses the
+  // shorter summary/summaryLong split above.
+  summaryResume:
+    "AI/ML Engineer and Data Scientist with 5+ years across applied ML, deep learning, and analytics — including 2+ years shipping production Generative AI systems in financial services, logistics, pharmaceuticals, and insurance. Specialized in LLM-powered applications (RAG, agentic workflows, fine-tuning with LoRA/QLoRA), LLM evaluation and observability (Ragas, LangSmith), classical and deep ML (XGBoost, Transformers, CNNs/RNNs, time-series), and multi-cloud MLOps on AWS, Azure, and GCP. Track record of translating ambiguous business problems into measurable outcomes — 45% support deflection at JPMC, $1.8M annual logistics savings, $50M+ pricing decisions informed by models, and 30–70% efficiency gains across automation, forecasting, and CX.",
 };
 
 export const stats = [
@@ -184,6 +191,9 @@ export const projects = [
     title: "Multi-Agent Financial Research Assistant",
     description:
       "An agentic GenAI system with tool-using agents, structured-output parsing, self-reflection loops, and Pinecone-backed long-term memory orchestrating SEC-filings retrieval, statement analysis, and competitor benchmarking.",
+    // Verbatim résumé bullet, used only by the downloadable PDF.
+    resumeBullet:
+      "Built an agentic GenAI system (LangGraph + GPT-4 + Claude) with tool-using agents, structured-output parsing, self-reflection loops, and Pinecone-backed long-term memory orchestrating SEC-filings retrieval, statement analysis, and competitor benchmarking — cutting research time from ~4 hours to ~12 minutes.",
     metric: "~4 hours → ~12 minutes",
     metricLabel: "Research time",
     stack: [
@@ -201,11 +211,14 @@ export const projects = [
     title: "Domain-Tuned Medical QA Chatbot",
     description:
       "Llama 3 8B fine-tuned with QLoRA on a curated PubMed + clinical-guideline corpus, deployed as a RAG-augmented chat UI with hallucination guardrails, PII redaction, and citation grounding.",
+    // Verbatim résumé bullet, used only by the downloadable PDF.
+    resumeBullet:
+      "Fine-tuned Llama 3 8B with QLoRA on a curated PubMed + clinical-guideline corpus and deployed a RAG-augmented chat UI with hallucination guardrails, PII redaction, and citation grounding — improved factuality (Ragas) from 0.71 → 0.89.",
     metric: "0.71 → 0.89",
     metricLabel: "Ragas factuality",
     stack: [
       "Llama 3",
-      "Hugging Face PEFT",
+      "Hugging Face PEFT / Transformers",
       "ChromaDB",
       "LangChain",
       "Gradio",
@@ -281,6 +294,9 @@ export const skills = [
       "VAEs",
       "Autoencoders",
       "Diffusion",
+      "Regression",
+      "SVM",
+      "KNN",
       "Random Forest",
       "Gradient Boosting",
       "K-Means",
@@ -363,9 +379,103 @@ export const education = {
 };
 
 export const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#experience", label: "Experience" },
-  { href: "#projects", label: "Projects" },
-  { href: "#skills", label: "Skills" },
-  { href: "#contact", label: "Contact" },
+  { href: "/about", label: "About" },
+  { href: "/experience", label: "Experience" },
+  { href: "/projects", label: "Projects" },
+  { href: "/skills", label: "Skills" },
+  { href: "/contact", label: "Contact" },
+];
+
+/**
+ * The three practice areas shown on the home page. Each maps to real roles in
+ * `experience` above — the companies, periods, and claims are lifted from
+ * those entries rather than written fresh, so there is one source of truth.
+ */
+export const domains = [
+  {
+    key: "genai",
+    title: "Generative AI",
+    company: "JP Morgan Chase",
+    period: "Mar 2025 — Present",
+    blurb:
+      "Enterprise GenAI support assistant on GPT-4 with hybrid retrieval over 500K+ documents. Fine-tuned Llama 3 and BERT with LoRA/QLoRA, and built the observability layer keeping 12+ production agents honest.",
+    points: [
+      "45% faster ticket resolution",
+      "Domain QA 68% → 91%",
+      "40% lower inference cost",
+    ],
+  },
+  {
+    key: "ml",
+    title: "Machine Learning",
+    company: "GXO Logistics",
+    period: "Aug 2024 — Feb 2025",
+    blurb:
+      "Demand-forecasting and route-optimization models on GCP Vertex AI, plus an NLP shipment classifier over 1M+ daily records and the MLOps backbone behind them.",
+    points: [
+      "$1.8M saved annually",
+      "22% better forecast accuracy",
+      "Deploys: 3 weeks → 2 days",
+    ],
+  },
+  {
+    key: "ds",
+    title: "Data Science",
+    company: "Ajanta Pharma · ICICI Prudential",
+    period: "Mar 2020 — Jul 2023",
+    blurb:
+      "Deep learning for pharmaceutical imaging and adverse-event text mining, demand and price-elasticity modelling, and 13+ analytics products across portfolio modelling and forecasting.",
+    points: [
+      "94% F1 on classification",
+      "$50M+ pricing decisions informed",
+      "28% faster regulatory review",
+    ],
+  },
+];
+
+/**
+ * Headline outcomes for the About page. Every figure here is restated from a
+ * bullet in `experience` — nothing is introduced that the résumé doesn't claim.
+ */
+export const achievements = [
+  {
+    metric: "45%",
+    label: "Lower ticket resolution time",
+    context: "GenAI support assistant at JP Morgan Chase",
+  },
+  {
+    metric: "$1.8M",
+    label: "Annual logistics savings",
+    context: "Demand forecasting and route optimization at GXO",
+  },
+  {
+    metric: "91%",
+    label: "Domain QA accuracy, up from 68%",
+    context: "LoRA/QLoRA fine-tuning on 2M tokens of financial docs",
+  },
+  {
+    metric: "$50M+",
+    label: "Pricing decisions informed",
+    context: "Elasticity and demand models at Ajanta Pharma",
+  },
+  {
+    metric: "10TB+",
+    label: "Daily pipeline throughput at 99.5% SLA",
+    context: "PySpark, BigQuery, and Airflow at GXO",
+  },
+  {
+    metric: "99.9%",
+    label: "Uptime at 5K+ requests/min",
+    context: "FastAPI microservices on AWS EKS",
+  },
+  {
+    metric: "94%",
+    label: "F1 on pharmaceutical classification",
+    context: "CNNs, RNNs, and Transformers at Ajanta Pharma",
+  },
+  {
+    metric: "70%",
+    label: "Faster decision turnaround",
+    context: "Self-service BI rebuild at ICICI Prudential",
+  },
 ];

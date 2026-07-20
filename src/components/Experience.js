@@ -73,7 +73,11 @@ function Role({ job }) {
   );
 }
 
-export default function Experience() {
+/**
+ * `showHeading` is false when the component sits on /experience, where the
+ * page hero already states the title — rendering both would repeat it.
+ */
+export default function Experience({ showHeading = true }) {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -89,13 +93,17 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative mx-auto max-w-7xl scroll-mt-24 px-6 py-28 lg:px-10 lg:py-36"
+      className={`relative mx-auto max-w-7xl scroll-mt-24 px-6 lg:px-10 ${
+        showHeading ? "py-28 lg:py-36" : "pt-8 pb-28 lg:pb-36"
+      }`}
     >
-      <SectionHeading
-        index="02"
-        title="Experience"
-        lead="Five years shipping ML and GenAI across finance, logistics, pharma, and insurance."
-      />
+      {showHeading ? (
+        <SectionHeading
+          index="02"
+          title="Experience"
+          lead="Five years shipping ML and GenAI across finance, logistics, pharma, and insurance."
+        />
+      ) : null}
 
       <div ref={containerRef} className="relative ml-1 sm:ml-3">
         {/* Track + progress line */}
