@@ -1,26 +1,204 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---------------------------------------------------------------
+   Theme tokens. Every component styles against these — never against
+   raw white/black — so light and dark both stay correct.
+
+   Dark is the default. Before JS runs there is no [data-theme] on
+   <html>, so a light-preferring OS gets the light palette straight from
+   the media query below — correct first paint with zero JS and no
+   nonce'd inline script. Once ThemeToggle mounts it writes [data-theme],
+   which wins over both blocks.
+   --------------------------------------------------------------- */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #050506;
+  --bg-elevated: #0c0c0f;
+  --fg: #ffffff;
+
+  --accent-1: #8b7cf6; /* violet */
+  --accent-2: #22d3ee; /* cyan   */
+  --accent-3: #f472b6; /* rose   */
+
+  /* Ambient washes layered behind sections. */
+  --wash-1: rgba(139, 124, 246, 0.18);
+  --wash-2: rgba(34, 211, 238, 0.13);
+  --wash-3: rgba(244, 114, 182, 0.1);
+  --sheen: rgba(255, 255, 255, 0.06);
+  --grid-line: rgba(255, 255, 255, 0.05);
+  --scrollbar: #2a2a2e;
+  --scrollbar-hover: #46464d;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #fbfbfd;
+    --bg-elevated: #ffffff;
+    --fg: #08080a;
+
+    --accent-1: #6d28d9;
+    --accent-2: #0891b2;
+    --accent-3: #db2777;
+
+    --wash-1: rgba(109, 40, 217, 0.13);
+    --wash-2: rgba(8, 145, 178, 0.1);
+    --wash-3: rgba(219, 39, 119, 0.08);
+    --sheen: rgba(8, 8, 10, 0.04);
+    --grid-line: rgba(8, 8, 10, 0.055);
+    --scrollbar: #d3d3da;
+    --scrollbar-hover: #b3b3bd;
   }
 }
 
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #fbfbfd;
+  --bg-elevated: #ffffff;
+  --fg: #08080a;
+
+  --accent-1: #6d28d9;
+  --accent-2: #0891b2;
+  --accent-3: #db2777;
+
+  --wash-1: rgba(109, 40, 217, 0.13);
+  --wash-2: rgba(8, 145, 178, 0.1);
+  --wash-3: rgba(219, 39, 119, 0.08);
+  --sheen: rgba(8, 8, 10, 0.04);
+  --grid-line: rgba(8, 8, 10, 0.055);
+  --scrollbar: #d3d3da;
+  --scrollbar-hover: #b3b3bd;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-elevated: var(--bg-elevated);
+  --color-fg: var(--fg);
+  --color-accent: var(--accent-1);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-spin-slow: spin 24s linear infinite;
+  --animate-drift: drift 18s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translate3d(3%, -4%, 0) scale(1.08);
+    opacity: 1;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
+}
+
+::selection {
+  background: var(--accent-1);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Faint blueprint grid. */
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Gradient text used for headline accents. */
+@utility text-gradient {
+  background-image: linear-gradient(
+    115deg,
+    var(--fg) 0%,
+    var(--fg) 38%,
+    var(--accent-1) 68%,
+    var(--accent-2) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Hairline gradient rule. */
+@utility rule-gradient {
+  background-image: linear-gradient(
+    to right,
+    var(--accent-1),
+    var(--accent-2),
+    transparent
+  );
+}
+
+/* 1px gradient border on a rounded surface. */
+@utility ring-gradient {
+  background:
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    linear-gradient(135deg, var(--accent-1), var(--accent-2)) border-box;
+  border: 1px solid transparent;
+}
+
+@utility text-balance-tight {
+  text-wrap: balance;
 }

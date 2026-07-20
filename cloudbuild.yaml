@@ -1,0 +1,85 @@
+# Cloud Build pipeline for the portfolio.
+#
+# Triggered by pushes to `main` on GitHub. Builds the container, pushes it to
+# Artifact Registry tagged with the commit SHA, then rolls it out to Cloud Run.
+#
+# All configuration comes from Secret Manager — nothing sensitive is committed
+# here or baked into the image layers.
+
+substitutions:
+  _REGION: us-south1
+  _AR_REPO: portfolio
+  _SERVICE: portfolio
+  _RUNTIME_SA: portfolio-run@$PROJECT_ID.iam.gserviceaccount.com
+  # Overridden by the trigger; falls back to "manual" for local submissions.
+  _TAG: ${SHORT_SHA:-manual}
+
+# Build-time secrets. NEXT_PUBLIC_* values are inlined into the client bundle
+# by Next at build time, so they must be present here, not just at runtime.
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/NEXT_PUBLIC_SITE_URL/versions/latest
+      env: NEXT_PUBLIC_SITE_URL
+
+steps:
+  # 1. Build the image, injecting the build-time secret as a --build-arg.
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    secretEnv: [NEXT_PUBLIC_SITE_URL]
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        IMAGE="${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}"
+        docker build \
+          --build-arg NEXT_PUBLIC_SITE_URL="$$NEXT_PUBLIC_SITE_URL" \
+          -t "$$IMAGE:${_TAG}" \
+          -t "$$IMAGE:latest" \
+          .
+
+  # 2. Push both tags.
+  - id: push
+    name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        IMAGE="${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}"
+        docker push "$$IMAGE:${_TAG}"
+        docker push "$$IMAGE:latest"
+
+  # 3. Roll out to Cloud Run. Deployed by immutable SHA tag, never :latest.
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        IMAGE="${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}"
+        gcloud run deploy "${_SERVICE}" \
+          --image="$$IMAGE:${_TAG}" \
+          --region="${_REGION}" \
+          --platform=managed \
+          --service-account="${_RUNTIME_SA}" \
+          --min-instances=0 \
+          --max-instances=10 \
+          --cpu=1 \
+          --memory=512Mi \
+          --concurrency=80 \
+          --timeout=60s \
+          --port=8080 \
+          --allow-unauthenticated \
+          --quiet
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:${_TAG}
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:latest
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
+
+timeout: 1200s
