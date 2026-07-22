@@ -16,7 +16,10 @@ import crypto from "node:crypto";
  */
 
 const COLLECTION = process.env.FIRESTORE_COLLECTION || "portfolio_visitors";
+const CHAT_COLLECTION =
+  process.env.FIRESTORE_CHAT_COLLECTION || "chat_sessions";
 const LOCAL_FILE = path.join(process.cwd(), ".data", "visitors.jsonl");
+const CHAT_LOCAL_FILE = path.join(process.cwd(), ".data", "chats.jsonl");
 
 // This project's Firestore instance is a *named* database ("portfoliodata"),
 // not the account-wide "(default)" one, so the client must target it by id.
@@ -55,14 +58,14 @@ async function firestore() {
   return clientPromise;
 }
 
-async function appendLocal(record) {
-  await fs.mkdir(path.dirname(LOCAL_FILE), { recursive: true });
-  await fs.appendFile(LOCAL_FILE, `${JSON.stringify(record)}\n`, "utf8");
+async function appendLocal(file, record) {
+  await fs.mkdir(path.dirname(file), { recursive: true });
+  await fs.appendFile(file, `${JSON.stringify(record)}\n`, "utf8");
 }
 
-async function readLocal() {
+async function readLocal(file) {
   try {
-    const raw = await fs.readFile(LOCAL_FILE, "utf8");
+    const raw = await fs.readFile(file, "utf8");
     return raw
       .split("\n")
       .filter(Boolean)
@@ -108,7 +111,7 @@ export async function recordVisitor(visitor) {
         "No Firestore project configured. Set GOOGLE_CLOUD_PROJECT on the Cloud Run service.",
       );
     }
-    await appendLocal(record);
+    await appendLocal(LOCAL_FILE, record);
     return record;
   }
 
@@ -120,7 +123,7 @@ export async function recordVisitor(visitor) {
 /** Most recent sign-ins first. Used by the private /visitors page. */
 export async function listVisitors(limit = 200) {
   if (!usingFirestore()) {
-    const all = await readLocal();
+    const all = await readLocal(LOCAL_FILE);
     return all
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
       .slice(0, limit);
@@ -129,6 +132,52 @@ export async function listVisitors(limit = 200) {
   const db = await firestore();
   const snapshot = await db
     .collection(COLLECTION)
+    .orderBy("createdAt", "desc")
+    .limit(limit)
+    .get();
+
+  return snapshot.docs.map((doc) => doc.data());
+}
+
+/**
+ * Persists one chatbot conversation turn (the visitor question + the assistant
+ * reply). Best-effort: a failure here must never break the chat response the
+ * visitor is waiting on, so callers log and move on rather than surfacing it.
+ */
+export async function recordChat(chat) {
+  const record = {
+    id: crypto.randomUUID(),
+    question: chat.question,
+    answer: chat.answer,
+    referrer: chat.referrer || null,
+    userAgent: chat.userAgent || null,
+    createdAt: new Date().toISOString(),
+  };
+
+  if (!usingFirestore()) {
+    if (process.env.NODE_ENV !== "production") {
+      await appendLocal(CHAT_LOCAL_FILE, record);
+    }
+    return record;
+  }
+
+  const db = await firestore();
+  await db.collection(CHAT_COLLECTION).doc(record.id).set(record);
+  return record;
+}
+
+/** Most recent chats first. For a future private review view. */
+export async function listChats(limit = 200) {
+  if (!usingFirestore()) {
+    const all = await readLocal(CHAT_LOCAL_FILE);
+    return all
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .slice(0, limit);
+  }
+
+  const db = await firestore();
+  const snapshot = await db
+    .collection(CHAT_COLLECTION)
     .orderBy("createdAt", "desc")
     .limit(limit)
     .get();

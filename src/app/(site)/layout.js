@@ -1,3 +1,4 @@
+import ChatWidget from "@/components/ChatWidget";
 import Contact from "@/components/Contact";
 import CursorGlow from "@/components/CursorGlow";
 import Nav from "@/components/Nav";
@@ -19,6 +20,7 @@ export default function SiteLayout({ children }) {
       <Nav />
       <main className="relative z-10 flex-1">{children}</main>
       <Contact />
+      <ChatWidget />
     </>
   );
 }

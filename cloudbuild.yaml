@@ -92,7 +92,7 @@ steps:
           --timeout=60s \
           --port=8080 \
           --allow-unauthenticated \
-          --set-env-vars=GOOGLE_CLOUD_PROJECT=$PROJECT_ID,FIRESTORE_DATABASE_ID=portfoliodata \
+          --set-env-vars=GOOGLE_CLOUD_PROJECT=$PROJECT_ID,FIRESTORE_DATABASE_ID=portfoliodata,GOOGLE_CLOUD_LOCATION=us-central1 \
           --set-secrets=SESSION_SECRET=SESSION_SECRET:latest,ADMIN_KEY=ADMIN_KEY:latest \
           --quiet
 
