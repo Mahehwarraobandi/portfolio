@@ -378,6 +378,25 @@ export const education = {
   date: "May 2025",
 };
 
+/**
+ * Personal / conversational Q&A that Bandi Bot answers in the first person,
+ * beyond what the résumé sections above cover — work authorization, what I'm
+ * looking for, how I like to work, interests outside of work, and any answers I
+ * refined after testing the live bot.
+ *
+ * Written as questions I'd actually be asked, with answers in my own voice.
+ * Anything here is folded into the assistant's knowledge automatically
+ * (`src/lib/chat.js`), so this is the one place to add or correct a personal
+ * answer — no code changes needed.
+ */
+export const faq = [
+  // Example shape — replace with your real Q&A:
+  // {
+  //   q: "Are you authorized to work in the US?",
+  //   a: "Yes — I'm based in Kansas and authorized to work in the US.",
+  // },
+];
+
 export const navLinks = [
   { href: "/about", label: "About" },
   { href: "/experience", label: "Experience" },

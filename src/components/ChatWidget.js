@@ -6,13 +6,62 @@ import { profile } from "@/data/resume";
 
 const ease = [0.22, 1, 0.36, 1];
 
+const BOT_NAME = "Bandi Bot";
+
+// How long the panel waits before popping itself open on a fresh visit.
+const AUTO_OPEN_DELAY_MS = 1000;
+// Once the visitor has seen the panel this session, don't auto-open it again.
+const SEEN_KEY = "bandibot-seen";
+
 const SUGGESTIONS = [
-  "What's his experience with RAG?",
-  "Where does he work now?",
-  "Summarize his GenAI projects",
+  "What are you working on right now?",
+  "What's your experience with RAG?",
+  "Tell me about your GenAI projects",
 ];
 
-const GREETING = `Hi! I'm ${profile.firstName}'s assistant. Ask me anything about his experience, projects, or skills.`;
+const GREETING = `Hey — I'm ${profile.firstName} 👋 (well, an AI version of me, answering as myself). Before we dive in, what's your name, and which company are you with? Then ask me anything about my experience, projects, or background.`;
+
+/** Friendly robot mark for the launcher and header — inline SVG, no licensing,
+ *  themes with the surrounding text via currentColor. */
+function BotIcon({ className = "h-6 w-6" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M12 2.5V5" />
+      <circle cx="12" cy="1.8" r="1" fill="currentColor" stroke="none" />
+      <rect x="4" y="6" width="16" height="12" rx="3.5" />
+      <path d="M2.5 11v2M21.5 11v2" />
+      <circle cx="9" cy="12" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="12" r="1.2" fill="currentColor" stroke="none" />
+      <path d="M9.5 15h5" />
+    </svg>
+  );
+}
+
+/** Close (×) mark, matching the line style of the bot icon. */
+function CloseIcon({ className = "h-5 w-5" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
 
 function Bubble({ role, text }) {
   const isUser = role === "user";
@@ -51,6 +100,34 @@ export default function ChatWidget() {
       behavior: reduced ? "auto" : "smooth",
     });
   }, [messages, reduced]);
+
+  // Pop the panel open shortly after the first visit so visitors notice they
+  // can chat with me. Only once per session — sessionStorage remembers that
+  // they've seen it, so it won't reopen as they move between pages or after
+  // they close it. (The layout persists across route changes, so this effect
+  // runs a single time per browser session.)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let seen;
+    try {
+      seen = window.sessionStorage.getItem(SEEN_KEY);
+    } catch {
+      seen = null; // Private mode / storage blocked — just skip auto-open.
+    }
+    if (seen) return;
+    const timer = setTimeout(() => setOpen(true), AUTO_OPEN_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Remember that the panel has been shown, so we don't auto-open it again.
+  useEffect(() => {
+    if (!open) return;
+    try {
+      window.sessionStorage.setItem(SEEN_KEY, "1");
+    } catch {
+      /* storage blocked — non-fatal */
+    }
+  }, [open]);
 
   async function send(text) {
     const question = text.trim();
@@ -125,7 +202,9 @@ export default function ChatWidget() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        aria-label={open ? "Close assistant" : "Ask about Maheshwar"}
+        aria-label={
+          open ? `Close ${BOT_NAME}` : `Chat with ${profile.firstName}`
+        }
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease, delay: 1 }}
@@ -140,9 +219,9 @@ export default function ChatWidget() {
             animate={{ opacity: 1, rotate: 0 }}
             exit={{ opacity: 0, rotate: 90 }}
             transition={{ duration: 0.2 }}
-            className="text-xl"
+            className="flex items-center justify-center"
           >
-            {open ? "✕" : "💬"}
+            {open ? <CloseIcon /> : <BotIcon />}
           </motion.span>
         </AnimatePresence>
       </motion.button>
@@ -156,20 +235,20 @@ export default function ChatWidget() {
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.3, ease }}
             role="dialog"
-            aria-label="Portfolio assistant"
+            aria-label={BOT_NAME}
             className="border-fg/10 bg-bg/95 fixed right-5 bottom-24 z-50 flex h-[min(32rem,70vh)] w-[min(24rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-3xl border shadow-2xl shadow-black/30 backdrop-blur-xl"
           >
             {/* Header */}
             <div className="border-fg/10 flex items-center gap-3 border-b px-5 py-4">
-              <span className="from-accent to-accent-2 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br text-sm text-white">
-                AI
+              <span className="from-accent to-accent-2 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br text-white">
+                <BotIcon className="h-5 w-5" />
               </span>
               <div>
                 <p className="text-sm font-semibold tracking-[-0.01em]">
-                  Ask about {profile.firstName}
+                  {BOT_NAME}
                 </p>
                 <p className="text-fg/40 font-mono text-[10px] tracking-[0.14em] uppercase">
-                  Portfolio assistant
+                  {profile.firstName}, in my own words
                 </p>
               </div>
             </div>
