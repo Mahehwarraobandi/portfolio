@@ -9,23 +9,24 @@ import {
   experience,
   profile,
   projects,
+  publication,
   skills,
 } from "../src/data/resume.js";
 
 /**
  * Renders the résumé PDF served behind the sign-in gate.
  *
- * The section order, headings, and wording mirror the source résumé document
- * (MaheshwarRaoBandi.docx): Professional Summary → Core Technical Competencies
- * → Professional Experience → Key Projects → Education. Content comes from
- * `src/data/resume.js` — the same file the site renders — so the download can't
- * drift from the pages. The PDF-only fields there are `profile.summaryResume`
- * and each `project.resumeBullet`, which carry the document's verbatim text.
+ * The section order, headings, and wording mirror the TQL résumé document
+ * (mahesh_Resume.docx): Professional Summary → Technical Skills → Professional
+ * Experience → Projects → Education → Publication. Content comes from
+ * `src/data/resume.js` — the same file the site renders — so the download
+ * can't drift from the pages. `profile.summaryResume` and each project's
+ * `bullets` carry the document's verbatim text.
  *
  * Re-run with `npm run generate:resume` after editing that data.
  *
  * pdfkit is a devDependency: this runs at authoring time and the output is
- * committed to public/. Nothing here ships in the Cloud Run image.
+ * committed to public/. Nothing here ships in the Worker.
  */
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -40,7 +41,7 @@ const INK = "#111114";
 const MUTED = "#55555f";
 const HAIRLINE = "#d8d8de";
 
-const MARGIN = 46;
+const MARGIN = 38;
 const doc = new PDFDocument({
   size: "LETTER",
   margins: { top: MARGIN, bottom: MARGIN, left: MARGIN, right: MARGIN },
@@ -104,14 +105,25 @@ function bullet(text, { size = 8.6 } = {}) {
   doc.moveDown(0.2);
 }
 
-function techStack(items) {
-  ensure(22);
-  const x = MARGIN + 10;
-  doc.font("Helvetica-Oblique").fontSize(7.8).fillColor(INK);
-  doc.text("Tech Stack: ", x, doc.y, { width: WIDTH - 10, continued: true });
-  doc.font("Helvetica").fillColor(MUTED).text(items.join(", "), {
-    lineGap: 0.6,
-  });
+/** "Left text ........ right text" on one line, e.g. a role and its dates. */
+function splitLine(left, right, { font = "Helvetica-Bold", size = 10 } = {}) {
+  ensure(30);
+  const top = doc.y;
+  doc
+    .font(font)
+    .fontSize(size)
+    .fillColor(INK)
+    .text(clean(left), MARGIN, top, { width: WIDTH * 0.74 });
+  const after = doc.y;
+  doc
+    .font("Helvetica")
+    .fontSize(8.5)
+    .fillColor(MUTED)
+    .text(clean(right), MARGIN + WIDTH * 0.74, top + 1.5, {
+      width: WIDTH * 0.26,
+      align: "right",
+    });
+  doc.y = Math.max(after, top + size + 3);
 }
 
 /* ---------------- Header ---------------- */
@@ -123,20 +135,14 @@ doc
   .text(profile.name, { characterSpacing: -0.3 });
 
 doc.moveDown(0.25);
-doc
-  .font("Helvetica")
-  .fontSize(10.5)
-  .fillColor(ACCENT_2)
-  .text(profile.roles.join("  |  "));
+doc.font("Helvetica").fontSize(10.5).fillColor(ACCENT_2).text(profile.headline);
 
-// Contact line — order matches the document, LinkedIn as a live link.
+// Contact line, LinkedIn as a live link.
 doc.moveDown(0.4);
 doc.font("Helvetica").fontSize(9).fillColor(MUTED);
 doc.text(
   `${profile.location}   |   ${profile.phone}   |   ${profile.email}   |   `,
-  {
-    continued: true,
-  },
+  { continued: true },
 );
 doc
   .fillColor(ACCENT_2)
@@ -155,15 +161,15 @@ doc
     lineGap: 1.4,
   });
 
-/* ---------------- Core Technical Competencies ---------------- */
+/* ---------------- Technical Skills ---------------- */
 
-sectionTitle("Core Technical Competencies");
+sectionTitle("Technical Skills");
 
 skills.forEach((group) => {
-  ensure(30);
+  ensure(24);
   doc
     .font("Helvetica-Bold")
-    .fontSize(8.6)
+    .fontSize(8.8)
     .fillColor(INK)
     .text(`${group.title}: `, MARGIN, doc.y, { width: WIDTH, continued: true });
   doc
@@ -178,75 +184,57 @@ skills.forEach((group) => {
 sectionTitle("Professional Experience");
 
 experience.forEach((job, index) => {
-  if (index > 0) doc.moveDown(0.55);
-  ensure(70);
-
-  const top = doc.y;
-  doc
-    .font("Helvetica-Bold")
-    .fontSize(11)
-    .fillColor(INK)
-    .text(`${job.company}  |  ${job.location}`, MARGIN, top, {
-      width: WIDTH * 0.68,
-    });
-
-  doc
-    .font("Helvetica")
-    .fontSize(8.5)
-    .fillColor(MUTED)
-    .text(job.period, MARGIN + WIDTH * 0.68, top + 1.5, {
-      width: WIDTH * 0.32,
-      align: "right",
-    });
-
-  doc.y = Math.max(doc.y, top + 13);
-  doc
-    .font("Helvetica-Oblique")
-    .fontSize(9.5)
-    .fillColor(ACCENT_2)
-    .text(job.role, MARGIN, doc.y);
-
-  doc.moveDown(0.35);
+  if (index > 0) doc.moveDown(0.5);
+  ensure(60);
+  splitLine(`${job.role}  |  ${job.company}  |  ${job.location}`, job.period);
+  doc.moveDown(0.3);
   job.bullets.forEach((line) => bullet(line));
-  techStack(job.stack);
 });
 
-/* ---------------- Key Projects ---------------- */
+/* ---------------- Projects ---------------- */
 
-sectionTitle("Key Projects");
+sectionTitle("Projects");
 
 projects.forEach((project, index) => {
-  if (index > 0) doc.moveDown(0.45);
-  ensure(58);
-
-  doc
-    .font("Helvetica-Bold")
-    .fontSize(10)
-    .fillColor(INK)
-    .text(project.title, MARGIN, doc.y, { width: WIDTH });
-
+  if (index > 0) doc.moveDown(0.4);
+  ensure(48);
+  splitLine(`${project.title}  |  ${project.org}`, project.period);
   doc.moveDown(0.25);
-  bullet(project.resumeBullet);
-  techStack(project.stack);
+  project.bullets.forEach((line) => bullet(line));
 });
 
 /* ---------------- Education ---------------- */
 
 sectionTitle("Education");
 
-ensure(40);
+education.forEach((school) => {
+  splitLine(
+    `${school.degree}  |  ${school.school}  |  GPA: ${school.gpa}`,
+    school.period,
+    { size: 9.5 },
+  );
+  doc.moveDown(0.3);
+});
+
+/* ---------------- Publication ---------------- */
+
+sectionTitle("Publication");
+
+ensure(24);
 doc
   .font("Helvetica-Bold")
-  .fontSize(10)
+  .fontSize(9)
   .fillColor(INK)
-  .text(`${education.degree} — ${education.school}`, MARGIN, doc.y, {
+  .text(`${publication.title}`, MARGIN, doc.y, {
     width: WIDTH,
+    continued: true,
   });
 doc
   .font("Helvetica")
-  .fontSize(9)
   .fillColor(MUTED)
-  .text(`GPA: ${education.gpa}   |   ${education.date}`);
+  .text(
+    `, ${publication.venue}, ${publication.role.toLowerCase()}, ${publication.year}; ${publication.note.toLowerCase()}`,
+  );
 
 doc.end();
 

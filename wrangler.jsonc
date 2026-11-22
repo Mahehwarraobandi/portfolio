@@ -1,0 +1,45 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portfolio",
+  // Custom entry point. It wraps the worker OpenNext builds into
+  // .open-next/worker.js and adds the per-request CSP nonce (see worker.js).
+  "main": "worker.js",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+  // Static files (/_next/static, /public) are served straight from the edge
+  // without invoking the Worker. Their headers come from public/_headers.
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+
+  // Recruiter sign-ins and chatbot transcripts. Schema lives in migrations/.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "portfolio",
+      "database_id": "329e4b7a-1936-4e66-aa15-8726120b5a11",
+      "migrations_dir": "migrations",
+    },
+  ],
+
+  // The chatbot's model. No API key: the binding authenticates the Worker.
+  // Workers AI has no local emulator, so dev calls hit Cloudflare too.
+  "ai": {
+    "binding": "AI",
+    "remote": true,
+  },
+
+  // Non-secret runtime config. SESSION_SECRET and ADMIN_KEY are Worker
+  // secrets (`wrangler secret put`), never values in this file.
+  "vars": {
+    "WORKERS_AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+  },
+
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": {
+    "enabled": true,
+  },
+}

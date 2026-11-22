@@ -1,4 +1,5 @@
 import Reveal from "@/components/Reveal";
+import WordReveal from "@/components/WordReveal";
 
 export default function SectionHeading({ index, title, lead }) {
   return (
@@ -15,11 +16,11 @@ export default function SectionHeading({ index, title, lead }) {
         </div>
       </Reveal>
       {lead ? (
-        <Reveal delay={0.1}>
-          <h2 className="text-balance-tight mt-6 max-w-4xl text-[clamp(1.9rem,4.6vw,3.6rem)] leading-[1.08] font-semibold tracking-[-0.035em]">
-            {lead}
-          </h2>
-        </Reveal>
+        <WordReveal
+          as="h2"
+          text={lead}
+          className="text-balance-tight mt-6 max-w-4xl text-[clamp(1.9rem,4.6vw,3.6rem)] leading-[1.08] font-semibold tracking-[-0.035em]"
+        />
       ) : null}
     </div>
   );

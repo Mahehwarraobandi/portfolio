@@ -1,11 +1,13 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { education, profile } from "@/data/resume";
+import SpotlightCard from "@/components/SpotlightCard";
+import { education, profile, publication } from "@/data/resume";
 
 /**
- * The home page's introduction — who I am, plus education. The deeper
- * achievement and experience detail lives on /about and /experience.
+ * The home page's introduction — who I am, plus education and the
+ * publication. The deeper achievement and experience detail lives on /about
+ * and /experience.
  */
 export default function Intro() {
   return (
@@ -13,15 +15,15 @@ export default function Intro() {
       <SectionHeading
         index="01"
         title="Introduction"
-        lead="I turn ambiguous business problems into production AI systems with measurable outcomes."
+        lead="I build the whole product — the interface, the API and data behind it, and the AI that makes it useful."
       />
 
       <div className="grid gap-14 lg:grid-cols-[1.15fr_1fr]">
         <Reveal from="up">
-          <p className="text-fg/60 text-lg leading-relaxed">
+          <p className="text-fg/65 text-lg leading-relaxed">
             {profile.summary}
           </p>
-          <p className="text-fg/60 mt-6 text-lg leading-relaxed">
+          <p className="text-fg/65 mt-6 text-lg leading-relaxed">
             {profile.summaryLong}
           </p>
 
@@ -37,38 +39,38 @@ export default function Intro() {
         </Reveal>
 
         <Reveal delay={0.12} from="up">
-          <div className="border-fg/10 bg-fg/[0.02] rounded-3xl border p-8">
+          <SpotlightCard className="border-fg/10 bg-fg/[0.02] rounded-3xl border p-8">
             <span className="text-fg/40 font-mono text-[10px] tracking-[0.24em] uppercase">
               Education
             </span>
 
-            <h3 className="mt-5 text-xl leading-snug font-semibold tracking-[-0.02em]">
-              {education.degree}
-            </h3>
-            <p className="text-fg/55 mt-2 text-sm">{education.school}</p>
+            <ol className="border-fg/10 relative mt-6 space-y-7 border-l pl-6">
+              {education.map((school) => (
+                <li key={school.degree} className="relative">
+                  <span className="from-accent to-accent-2 absolute top-1.5 -left-[29px] h-2.5 w-2.5 rounded-full bg-gradient-to-br" />
+                  <h3 className="text-lg leading-snug font-semibold tracking-[-0.02em]">
+                    {school.degree}
+                  </h3>
+                  <p className="text-fg/55 mt-1 text-sm">{school.school}</p>
+                  <p className="text-fg/40 mt-2 font-mono text-[10px] tracking-[0.16em] uppercase">
+                    {school.period} · GPA {school.gpa}
+                  </p>
+                </li>
+              ))}
+            </ol>
 
-            <dl className="border-fg/10 mt-6 grid grid-cols-2 gap-6 border-t pt-6">
-              <div>
-                <dt className="text-fg/35 font-mono text-[10px] tracking-[0.18em] uppercase">
-                  Graduated
-                </dt>
-                <dd className="text-fg/75 mt-2 text-sm">{education.date}</dd>
-              </div>
-              <div>
-                <dt className="text-fg/35 font-mono text-[10px] tracking-[0.18em] uppercase">
-                  GPA
-                </dt>
-                <dd className="text-fg/75 mt-2 text-sm">{education.gpa}</dd>
-              </div>
-            </dl>
-
-            <div className="border-fg/10 mt-6 border-t pt-6">
-              <dt className="text-fg/35 font-mono text-[10px] tracking-[0.18em] uppercase">
-                Based in
-              </dt>
-              <dd className="text-fg/75 mt-2 text-sm">{profile.location}</dd>
+            <div className="border-fg/10 mt-8 border-t pt-6">
+              <span className="text-fg/35 font-mono text-[10px] tracking-[0.18em] uppercase">
+                Publication · {publication.year}
+              </span>
+              <p className="text-fg/80 mt-2 text-sm font-medium">
+                {publication.title}
+              </p>
+              <p className="text-fg/45 mt-1 text-xs">
+                {publication.venue} · {publication.role} · {publication.note}
+              </p>
             </div>
-          </div>
+          </SpotlightCard>
         </Reveal>
       </div>
     </section>

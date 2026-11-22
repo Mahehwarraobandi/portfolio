@@ -4,7 +4,7 @@ import Projects from "@/components/Projects";
 export const metadata = {
   title: "Projects",
   description:
-    "Agentic GenAI systems and fine-tuned models built end to end — multi-agent financial research and a domain-tuned medical QA chatbot.",
+    "Full-stack AI builds end to end — this portfolio and its AI chat, an AI-powered career navigator with RAG, and an employee skill-prediction platform.",
   alternates: { canonical: "/projects" },
 };
 
@@ -14,7 +14,7 @@ export default function ProjectsPage() {
       <PageHero
         eyebrow="03 / Projects"
         title="Selected projects"
-        lead="Agentic systems and fine-tuned models built end to end — from retrieval design and evaluation through to deployment."
+        lead="Full-stack AI products built end to end — from the interface and API through the model and deployment. Including the site you're on."
       />
       <Projects showHeading={false} />
     </>

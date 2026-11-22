@@ -22,7 +22,14 @@ const eslintConfig = defineConfig([
     files: ["scripts/**/*.mjs"],
     rules: { "no-console": "off" },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    ".open-next/**",
+    ".wrangler/**",
+  ]),
 ]);
 
 export default eslintConfig;

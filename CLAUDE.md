@@ -35,9 +35,23 @@
   `assets/headshot-source.jpeg` by `npm run generate:assets`.
 - Icons and the OG avatar are circular by design — keep them that way.
 
+## Hosting (since 2026-11-22)
+
+- Runs on **Cloudflare Workers** via `@opennextjs/cloudflare`; config in
+  `wrangler.jsonc`, adapter config in `open-next.config.mjs` (passed with
+  `--openNextConfigPath` because OpenNext only auto-detects a `.ts` file).
+- D1 (`DB` binding, schema in `migrations/`) stores sign-ins and chat
+  transcripts; Workers AI (`AI` binding) runs the chatbot. Bindings are read
+  through `src/lib/cloudflare.js`.
+- Secrets are Worker secrets (`wrangler secret put`), never in files.
+- Deploy with `npm run deploy` from this machine (the user chose direct
+  Wrangler deploys for Cloudflare). Wrangler needs Node ≥ 22.12.
+
 ## Security
 
-- CSP with a per-request nonce lives in `src/proxy.js` (Next 16 renamed the
-  `middleware` convention to `proxy`). Static security headers live in
-  `next.config.mjs`.
+- CSP with a per-request nonce is set in `worker.js` (the Worker entry that
+  wraps OpenNext's handler), using `src/lib/csp.js`. There is no `proxy.js`:
+  Next 16 proxy is Node-runtime only, which OpenNext marks experimental on
+  Workers. Static security headers live in `next.config.mjs` (rendered
+  responses) and `public/_headers` (static assets).
 - Any new inline `<script>` must carry the nonce read from `headers()`.

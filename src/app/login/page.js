@@ -63,11 +63,9 @@ export default async function LoginPage({ searchParams }) {
               </span>
 
               <h1 className="mt-6 text-[clamp(2rem,3.4vw,3.2rem)] leading-[1.05] font-semibold tracking-[-0.035em]">
-                Built with
+                Full stack,
                 <br />
-                <span className="from-accent via-accent-2 to-accent-3 bg-gradient-to-r bg-clip-text text-transparent">
-                  production AI.
-                </span>
+                <span className="text-shimmer">shipped with AI.</span>
               </h1>
 
               <p className="text-fg/55 mt-5 max-w-md text-sm leading-relaxed">

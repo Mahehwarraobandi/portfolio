@@ -1,87 +1,108 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useMotionTemplate, useMotionValue } from "motion/react";
+import { useRef, useSyncExternalStore } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import Ambient from "@/components/Ambient";
+import ProjectVisual from "@/components/ProjectVisual";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { projects } from "@/data/resume";
 
-function ProjectCard({ project, index }) {
-  const cardRef = useRef(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const [hovered, setHovered] = useState(false);
+const DESKTOP = "(min-width: 1024px)";
 
-  const background = useMotionTemplate`radial-gradient(420px circle at ${mouseX}px ${mouseY}px, var(--wash-1), var(--wash-2) 45%, transparent 72%)`;
-
-  const onMouseMove = (event) => {
-    const bounds = cardRef.current?.getBoundingClientRect();
-    if (!bounds) return;
-    mouseX.set(event.clientX - bounds.left);
-    mouseY.set(event.clientY - bounds.top);
-  };
-
-  return (
-    <Reveal delay={0.1 * index} from="up">
-      <motion.article
-        ref={cardRef}
-        onMouseMove={onMouseMove}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        whileHover={{ y: -6 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="group border-fg/10 bg-fg/[0.02] relative h-full overflow-hidden rounded-3xl border p-8 sm:p-10"
-      >
-        <motion.div
-          aria-hidden="true"
-          style={{ background }}
-          animate={{ opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="pointer-events-none absolute inset-0"
-        />
-        <div className="ring-fg/0 group-hover:ring-accent/40 pointer-events-none absolute inset-0 rounded-3xl ring-1 transition-all duration-500" />
-
-        <div className="relative">
-          <div className="flex items-start justify-between gap-6">
-            <span className="text-fg/30 font-mono text-xs tracking-[0.24em]">
-              {project.index}
-            </span>
-            <span className="text-right">
-              <span className="text-fg/35 block font-mono text-[10px] tracking-[0.2em] uppercase">
-                {project.metricLabel}
-              </span>
-              <span className="from-accent to-accent-2 mt-1 block bg-gradient-to-r bg-clip-text font-mono text-sm text-transparent">
-                {project.metric}
-              </span>
-            </span>
-          </div>
-
-          <h3 className="mt-8 text-[clamp(1.4rem,2.6vw,2rem)] leading-tight font-semibold tracking-[-0.03em]">
-            {project.title}
-          </h3>
-          <p className="text-fg/55 mt-4 leading-relaxed">
-            {project.description}
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-2">
-            {project.stack.map((tech) => (
-              <span
-                key={tech}
-                className="border-fg/10 text-fg/45 group-hover:border-accent/30 group-hover:text-fg/75 rounded-full border px-3 py-1.5 font-mono text-[11px] transition-colors duration-300"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
-      </motion.article>
-    </Reveal>
+/** True on wide screens, where the cards stack; phones get a plain list. */
+function useIsDesktop() {
+  return useSyncExternalStore(
+    (callback) => {
+      const query = window.matchMedia(DESKTOP);
+      query.addEventListener("change", callback);
+      return () => query.removeEventListener("change", callback);
+    },
+    () => window.matchMedia(DESKTOP).matches,
+    () => false,
   );
 }
 
-/** See the note on `Experience` — `showHeading` avoids a duplicate title. */
+function ProjectCard({ project, index, total, progress, stacking }) {
+  // Earlier cards shrink slightly as later ones slide over them.
+  const targetScale = 1 - (total - 1 - index) * 0.05;
+  const scale = useTransform(progress, [index / total, 1], [1, targetScale]);
+
+  return (
+    // The sticky wrapper must be a direct child of the tall container, or it
+    // has no room to stick within.
+    <div
+      className="lg:sticky"
+      style={stacking ? { top: `calc(7rem + ${index * 28}px)` } : undefined}
+    >
+      <Reveal from="up">
+        <motion.article
+          style={stacking ? { scale } : undefined}
+          className="border-fg/10 bg-elevated relative origin-top overflow-hidden rounded-[2rem] border shadow-2xl shadow-black/10"
+        >
+          <div className="from-accent/[0.07] pointer-events-none absolute inset-0 bg-gradient-to-br via-transparent to-transparent" />
+          <div className="relative grid gap-10 p-8 sm:p-10 lg:grid-cols-[1.1fr_1fr] lg:p-12">
+            <div className="flex flex-col">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-fg/30 font-mono text-xs tracking-[0.24em]">
+                  {project.index}
+                </span>
+                <span className="border-fg/15 text-fg/55 rounded-full border px-3 py-0.5 font-mono text-[10px] tracking-[0.16em] uppercase">
+                  {project.org} · {project.period}
+                </span>
+              </div>
+
+              <h3 className="mt-6 text-[clamp(1.6rem,3vw,2.4rem)] leading-tight font-semibold tracking-[-0.035em]">
+                {project.title}
+              </h3>
+              <p className="text-fg/60 mt-4 leading-relaxed">
+                {project.description}
+              </p>
+
+              <div className="border-fg/10 mt-8 border-t pt-6">
+                <span className="text-fg/35 block font-mono text-[10px] tracking-[0.2em] uppercase">
+                  {project.metricLabel}
+                </span>
+                <span className="text-shimmer mt-1 block text-xl font-semibold tracking-[-0.02em]">
+                  {project.metric}
+                </span>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-2">
+                {project.stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="border-fg/10 text-fg/55 hover:border-accent/40 hover:text-accent rounded-full border px-3 py-1.5 font-mono text-[11px] transition-colors duration-300"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="min-h-[16rem] lg:min-h-0">
+              <ProjectVisual index={index} />
+            </div>
+          </div>
+        </motion.article>
+      </Reveal>
+    </div>
+  );
+}
+
+/**
+ * Projects as a stack of cards that pile up as you scroll (desktop), each
+ * with a live-drawn preview. `showHeading` is false on /projects, where the
+ * page hero already states the title.
+ */
 export default function Projects({ showHeading = true }) {
+  const containerRef = useRef(null);
+  const stacking = useIsDesktop();
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
   return (
     <section
       id="projects"
@@ -92,14 +113,22 @@ export default function Projects({ showHeading = true }) {
       <Ambient variant="top" />
       {showHeading ? (
         <SectionHeading
-          index="03"
+          index="04"
           title="Selected Projects"
-          lead="Agentic systems and fine-tuned models built end to end."
+          lead="Things I built end to end — including the site you're on."
         />
       ) : null}
-      <div className="grid gap-6 lg:grid-cols-2">
+
+      <div ref={containerRef} className="relative space-y-8 lg:space-y-[16vh]">
         {projects.map((project, index) => (
-          <ProjectCard key={project.title} project={project} index={index} />
+          <ProjectCard
+            key={project.title}
+            project={project}
+            index={index}
+            total={projects.length}
+            progress={scrollYProgress}
+            stacking={stacking}
+          />
         ))}
       </div>
     </section>

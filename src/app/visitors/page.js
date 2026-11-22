@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import UnlockForm from "@/components/UnlockForm";
 import { ADMIN_COOKIE, readAdminToken } from "@/lib/session";
-import { listVisitors, usingFirestore } from "@/lib/visitors";
+import { listVisitors } from "@/lib/visitors";
 
 export const metadata = {
   title: "Visitors",
@@ -54,8 +54,7 @@ export default async function VisitorsPage() {
             </h1>
             <p className="text-fg/45 mt-2 text-sm">
               {visitors.length} sign-in{visitors.length === 1 ? "" : "s"} ·
-              stored in{" "}
-              {usingFirestore() ? "Firestore" : "the local dev file (.data/)"}
+              stored in Cloudflare D1
             </p>
           </div>
           <Link

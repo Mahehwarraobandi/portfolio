@@ -12,7 +12,7 @@ import {
  * Unlocks the private visitor list.
  *
  * The key is submitted through a form rather than a query string so it never
- * ends up in Cloud Run access logs or browser history.
+ * ends up in Worker logs or browser history.
  */
 export async function unlock(prevState, formData) {
   const key = formData.get("key");

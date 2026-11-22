@@ -37,7 +37,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="05 / Contact"
         title="Get in touch"
-        lead="Open to Generative AI, Machine Learning, and Data Science roles. The fastest way to reach me is email — or take the résumé with you."
+        lead="Open to Full Stack AI Engineer, Full Stack Engineer, and AI Engineer roles. The fastest way to reach me is email — or take the résumé with you."
       />
 
       <section className="mx-auto max-w-7xl px-6 pb-24 lg:px-10 lg:pb-32">

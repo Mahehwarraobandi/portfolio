@@ -21,6 +21,11 @@ export default function SiteLayout({ children }) {
       <main className="relative z-10 flex-1">{children}</main>
       <Contact />
       <ChatWidget />
+      {/* Film grain over everything — texture, not content. */}
+      <div
+        aria-hidden="true"
+        className="grain pointer-events-none fixed inset-0 z-[70] opacity-[0.045] mix-blend-overlay"
+      />
     </>
   );
 }

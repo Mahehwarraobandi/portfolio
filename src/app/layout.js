@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-const title = `${profile.name} — Generative AI Engineer`;
+const title = `${profile.name} — ${profile.headline}`;
 const description = profile.summary;
 
 export const metadata = {
@@ -30,12 +30,14 @@ export const metadata = {
   authors: [{ name: profile.name }],
   creator: profile.name,
   keywords: [
-    "Generative AI Engineer",
-    "Machine Learning Engineer",
-    "Data Scientist",
+    "Full Stack AI Engineer",
+    "Full Stack Engineer",
+    "Next.js",
+    "React",
+    "FastAPI",
     "LLM",
     "RAG",
-    "MLOps",
+    "Data Scientist",
     profile.name,
   ],
   openGraph: {
@@ -63,8 +65,8 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#050506" },
-    { media: "(prefers-color-scheme: light)", color: "#fbfbfd" },
+    { media: "(prefers-color-scheme: dark)", color: "#12122a" },
+    { media: "(prefers-color-scheme: light)", color: "#e7e6fb" },
   ],
 };
 
@@ -72,14 +74,15 @@ const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: profile.name,
-  jobTitle: profile.roles[0],
+  jobTitle: profile.headline,
   email: `mailto:${profile.email}`,
   telephone: profile.phone,
   url: siteUrl,
   sameAs: [profile.linkedin],
   address: {
     "@type": "PostalAddress",
-    addressRegion: "Kansas",
+    addressLocality: "Topeka",
+    addressRegion: "KS",
     addressCountry: "US",
   },
   description: profile.summary,

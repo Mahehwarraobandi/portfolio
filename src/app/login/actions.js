@@ -2,6 +2,7 @@
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { clientIp } from "@/lib/cloudflare";
 import { classifyEmail, validateVisitor } from "@/lib/validate";
 import { recordVisitor } from "@/lib/visitors";
 import {
@@ -12,8 +13,8 @@ import {
 
 /*
  * Coarse per-IP throttle. A server action is a public POST endpoint, so without
- * this a script could burn through the Firestore free tier in minutes. In-memory
- * is enough here: each Cloud Run instance keeps its own window, and the goal is
+ * this a script could burn through the D1 free tier in minutes. In-memory is
+ * enough here: each Worker isolate keeps its own window, and the goal is
  * blunting bulk abuse rather than exact accounting.
  */
 const WINDOW_MS = 60 * 60 * 1000;
@@ -45,10 +46,8 @@ function safeNext(value) {
 
 export async function signIn(prevState, formData) {
   const requestHeaders = await headers();
-  const ip =
-    requestHeaders.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
 
-  if (rateLimited(ip)) {
+  if (rateLimited(clientIp(requestHeaders))) {
     return {
       status: "error",
       message: "Too many attempts. Please try again a little later.",

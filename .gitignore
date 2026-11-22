@@ -42,3 +42,8 @@ next-env.d.ts
 
 # local visitor store (dev fallback when Firestore is not configured)
 /.data/
+
+# cloudflare (OpenNext build output, local wrangler state, local worker secrets)
+/.open-next/
+/.wrangler/
+.dev.vars*

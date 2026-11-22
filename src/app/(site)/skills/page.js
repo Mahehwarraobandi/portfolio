@@ -4,7 +4,7 @@ import Skills from "@/components/Skills";
 export const metadata = {
   title: "Skills",
   description:
-    "Generative AI, LLM tooling, vector databases, deep learning, NLP, data engineering, cloud and MLOps, programming, and visualization.",
+    "Front end, back end and APIs, cloud and DevOps, databases, AI and automation, and SEO and analytics.",
   alternates: { canonical: "/skills" },
 };
 
@@ -14,7 +14,7 @@ export default function SkillsPage() {
       <PageHero
         eyebrow="04 / Skills"
         title="Capabilities"
-        lead="The stack I build with, end to end — from retrieval and fine-tuning through to the pipelines and platforms that keep it running."
+        lead="The stack I build with, end to end — from the interface and the API to the database, the model, and the pipeline that ships it."
       />
       <Skills showHeading={false} />
     </>

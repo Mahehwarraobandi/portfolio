@@ -1,19 +1,24 @@
 import { headers } from "next/headers";
 import { MAX_INPUT_CHARS, streamReply } from "@/lib/chat";
+import { clientIp, runAfterResponse } from "@/lib/cloudflare";
 import { recordChat } from "@/lib/visitors";
 
 /**
  * The portfolio assistant endpoint.
  *
- * A public, unauthenticated POST that streams Gemini's reply back as plain
+ * A public, unauthenticated POST that streams the model's reply back as plain
  * text. Because anyone can call it, it is defended the same way the sign-in
  * action is: a per-IP rate limit plus hard input caps, so it can't be driven
- * to run up Vertex cost.
+ * to run up Workers AI usage.
  */
 
 // This route is request-specific and must never be prerendered or cached.
 export const dynamic = "force-dynamic";
 
+/*
+ * Coarse per-IP throttle. Each Worker isolate keeps its own window, which is
+ * enough to blunt bulk abuse without a shared store.
+ */
 const WINDOW_MS = 60 * 1000;
 const MAX_PER_WINDOW = 12; // messages per IP per minute
 const attempts = new Map();
@@ -38,10 +43,8 @@ function badRequest(message) {
 
 export async function POST(request) {
   const requestHeaders = await headers();
-  const ip =
-    requestHeaders.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
 
-  if (rateLimited(ip)) {
+  if (rateLimited(clientIp(requestHeaders))) {
     return Response.json(
       { error: "You're sending messages too quickly. Please slow down." },
       { status: 429 },
@@ -92,13 +95,14 @@ export async function POST(request) {
         controller.close();
       }
 
-      // Save the transcript after the reply is fully sent. Best-effort: a
-      // storage hiccup must not affect what the visitor already received.
-      try {
-        if (answer)
-          await recordChat({ question: message, answer, referrer, userAgent });
-      } catch (error) {
-        console.error("Failed to record chat:", error);
+      // Save the transcript after the reply is fully sent. waitUntil keeps the
+      // Worker alive for the write; a storage hiccup never reaches the visitor.
+      if (answer) {
+        await runAfterResponse(
+          recordChat({ question: message, answer, referrer, userAgent }).catch(
+            (error) => console.error("Failed to record chat:", error),
+          ),
+        );
       }
     },
   });

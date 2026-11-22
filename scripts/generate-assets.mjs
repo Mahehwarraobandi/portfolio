@@ -83,11 +83,11 @@ const ogSvg = `
   <circle cx="235" cy="315" r="162" fill="none" stroke="url(#ring)" stroke-opacity="0.85" stroke-width="2"/>
   <circle cx="235" cy="315" r="184" fill="none" stroke="url(#ring)" stroke-opacity="0.28" stroke-width="1"/>
   <text x="452" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="62" font-weight="700" fill="#ffffff" letter-spacing="-1.5">${esc("Maheshwar Rao Bandi")}</text>
-  <text x="454" y="312" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="29" font-weight="500" fill="#ffffff" fill-opacity="0.72" letter-spacing="0.5">${esc("Generative AI Engineer / ML Engineer")}</text>
+  <text x="454" y="312" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="29" font-weight="500" fill="#ffffff" fill-opacity="0.72" letter-spacing="0.5">${esc("Full Stack AI Engineer")}</text>
   <rect x="454" y="352" width="96" height="3" fill="url(#rule)" rx="1.5"/>
-  <text x="454" y="418" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#ffffff" fill-opacity="0.55">${esc("5+ yrs applied ML · 2+ yrs production GenAI")}</text>
-  <text x="454" y="458" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#ffffff" fill-opacity="0.55">${esc("LLMs · RAG · Agents · MLOps")}</text>
-  <text x="454" y="524" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="21" font-weight="500" fill="#ffffff" fill-opacity="0.38" letter-spacing="3">${esc("KANSAS, USA")}</text>
+  <text x="454" y="418" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#ffffff" fill-opacity="0.55">${esc("Next.js · React · FastAPI · PostgreSQL")}</text>
+  <text x="454" y="458" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#ffffff" fill-opacity="0.55">${esc("LLM features · RAG · Google Cloud")}</text>
+  <text x="454" y="524" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="21" font-weight="500" fill="#ffffff" fill-opacity="0.38" letter-spacing="3">${esc("TOPEKA, KS, USA")}</text>
 </svg>`;
 
 await sharp(Buffer.from(ogSvg))

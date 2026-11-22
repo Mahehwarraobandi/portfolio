@@ -15,7 +15,7 @@ const MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days
 const ADMIN_MAX_AGE_SECONDS = 60 * 60 * 12; // 12 hours
 
 /**
- * In production the secret must come from Secret Manager. Locally we fall back
+ * In production the secret is a Worker secret (`wrangler secret put`). Locally we fall back
  * to a fixed development key so the flow is testable with no setup — the
  * fallback is deliberately obvious so it can never be mistaken for a real one.
  */
@@ -25,7 +25,7 @@ function secret() {
 
   if (process.env.NODE_ENV === "production") {
     throw new Error(
-      "SESSION_SECRET is not set. Provide it via Secret Manager before deploying.",
+      "SESSION_SECRET is not set. Add it with `wrangler secret put SESSION_SECRET`.",
     );
   }
   return "dev-only-insecure-session-secret";

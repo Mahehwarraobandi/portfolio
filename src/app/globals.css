@@ -15,64 +15,66 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #050506;
-  --bg-elevated: #0c0c0f;
-  --fg: #ffffff;
+  --bg: #12122a; /* deep indigo-navy — colored, not black */
+  --bg-elevated: #1b1b3d;
+  --fg: #f6f5ff;
 
-  --accent-1: #8b7cf6; /* violet */
-  --accent-2: #22d3ee; /* cyan   */
-  --accent-3: #f472b6; /* rose   */
+  --accent-1: #9a8bff; /* violet */
+  --accent-2: #34dbf0; /* cyan   */
+  --accent-3: #f871bd; /* pink   */
 
-  /* Ambient washes layered behind sections. */
-  --wash-1: rgba(139, 124, 246, 0.18);
-  --wash-2: rgba(34, 211, 238, 0.13);
-  --wash-3: rgba(244, 114, 182, 0.1);
+  /* Ambient washes layered behind sections — richer, since the base is
+     already tinted, so the colour reads clearly. */
+  --wash-1: rgba(154, 139, 255, 0.24);
+  --wash-2: rgba(52, 219, 240, 0.18);
+  --wash-3: rgba(248, 113, 189, 0.15);
   --sheen: rgba(255, 255, 255, 0.06);
   --grid-line: rgba(255, 255, 255, 0.05);
-  --scrollbar: #2a2a2e;
-  --scrollbar-hover: #46464d;
+  --scrollbar: #2a2a4c;
+  --scrollbar-hover: #45456e;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
     color-scheme: light;
 
-    --bg: #fbfbfd;
-    --bg-elevated: #ffffff;
-    --fg: #08080a;
+    --bg: #e7e6fb; /* clear lavender/periwinkle — visibly colored */
+    --bg-elevated: #f6f5ff;
+    --fg: #191634;
 
-    --accent-1: #6d28d9;
-    --accent-2: #0891b2;
-    --accent-3: #db2777;
+    --accent-1: #7c3aed; /* vivid violet */
+    --accent-2: #0891b2; /* teal-cyan   */
+    --accent-3: #db2777; /* pink        */
 
-    --wash-1: rgba(109, 40, 217, 0.13);
-    --wash-2: rgba(8, 145, 178, 0.1);
-    --wash-3: rgba(219, 39, 119, 0.08);
-    --sheen: rgba(8, 8, 10, 0.04);
-    --grid-line: rgba(8, 8, 10, 0.055);
-    --scrollbar: #d3d3da;
-    --scrollbar-hover: #b3b3bd;
+    /* Strong washes so the ambient colour blobs actually read on light. */
+    --wash-1: rgba(124, 58, 237, 0.22);
+    --wash-2: rgba(8, 145, 178, 0.18);
+    --wash-3: rgba(219, 39, 119, 0.16);
+    --sheen: rgba(25, 22, 52, 0.05);
+    --grid-line: rgba(25, 22, 52, 0.07);
+    --scrollbar: #cec9f0;
+    --scrollbar-hover: #afa6e2;
   }
 }
 
 [data-theme="light"] {
   color-scheme: light;
 
-  --bg: #fbfbfd;
-  --bg-elevated: #ffffff;
-  --fg: #08080a;
+  --bg: #e7e6fb; /* clear lavender/periwinkle — visibly colored */
+  --bg-elevated: #f6f5ff;
+  --fg: #191634;
 
-  --accent-1: #6d28d9;
-  --accent-2: #0891b2;
-  --accent-3: #db2777;
+  --accent-1: #7c3aed; /* vivid violet */
+  --accent-2: #0891b2; /* teal-cyan   */
+  --accent-3: #db2777; /* pink        */
 
-  --wash-1: rgba(109, 40, 217, 0.13);
-  --wash-2: rgba(8, 145, 178, 0.1);
-  --wash-3: rgba(219, 39, 119, 0.08);
-  --sheen: rgba(8, 8, 10, 0.04);
-  --grid-line: rgba(8, 8, 10, 0.055);
-  --scrollbar: #d3d3da;
-  --scrollbar-hover: #b3b3bd;
+  --wash-1: rgba(124, 58, 237, 0.22);
+  --wash-2: rgba(8, 145, 178, 0.18);
+  --wash-3: rgba(219, 39, 119, 0.16);
+  --sheen: rgba(25, 22, 52, 0.05);
+  --grid-line: rgba(25, 22, 52, 0.07);
+  --scrollbar: #cec9f0;
+  --scrollbar-hover: #afa6e2;
 }
 
 @theme inline {
@@ -87,8 +89,12 @@
   --font-mono: var(--font-geist-mono);
 
   --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 48s linear infinite;
   --animate-spin-slow: spin 24s linear infinite;
+  --animate-spin-slower: spin 40s linear infinite reverse;
   --animate-drift: drift 18s ease-in-out infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-aurora: aurora 22s ease-in-out infinite;
 }
 
 @keyframes marquee {
@@ -98,6 +104,74 @@
   to {
     transform: translateX(-50%);
   }
+}
+
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -3%, 0) rotate(8deg) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-3%, 4%, 0) rotate(-6deg) scale(0.96);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+/* Registered so the conic border angle can animate smoothly. */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-spin {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/* Theme switch: ThemeToggle animates a circular clip-path on the new
+   snapshot, so the default cross-fade is switched off. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+[data-theme-switching] *,
+[data-theme-switching] *::before,
+[data-theme-switching] *::after {
+  transition: none !important;
 }
 
 @keyframes drift {
@@ -201,4 +275,86 @@ body {
 
 @utility text-balance-tight {
   text-wrap: balance;
+}
+
+/* Accent gradient that slowly travels across the text. */
+@utility text-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--accent-1),
+    var(--accent-2),
+    var(--accent-3),
+    var(--accent-1)
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
+/* Hollow display type for the footer wordmark. */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--fg) 24%, transparent);
+}
+
+/* Frosted panel that recolours with the theme. */
+@utility glass {
+  background: color-mix(in oklab, var(--bg-elevated) 62%, transparent);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+/* Soft fade on both horizontal edges (marquees). */
+@utility mask-fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 9%,
+    #000 91%,
+    transparent
+  );
+}
+
+/* Grid that fades out toward the edges of its box. */
+@utility mask-radial {
+  mask-image: radial-gradient(ellipse at center, #000 25%, transparent 72%);
+}
+
+/* Fine film grain, laid over the whole page at very low opacity. */
+@utility grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 1px conic border that rotates around a rounded surface. */
+@utility border-spin {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    padding: 1px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      var(--accent-1) 70deg,
+      var(--accent-2) 140deg,
+      transparent 200deg,
+      transparent 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    animation: border-spin 6s linear infinite;
+    pointer-events: none;
+  }
 }

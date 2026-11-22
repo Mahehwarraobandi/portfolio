@@ -4,7 +4,7 @@ import PageHero from "@/components/PageHero";
 export const metadata = {
   title: "Experience",
   description:
-    "Five years shipping machine learning and generative AI across financial services, logistics, pharmaceuticals, and insurance.",
+    "Full stack engineering at Nimbus Teck and data science at Ajanta Pharma — every role and every outcome, in full.",
   alternates: { canonical: "/experience" },
 };
 
@@ -14,7 +14,7 @@ export default function ExperiencePage() {
       <PageHero
         eyebrow="02 / Experience"
         title="Experience"
-        lead="Five years shipping ML and GenAI across finance, logistics, pharma, and insurance — every role, every outcome, in full."
+        lead="Full stack engineering today — Next.js, FastAPI, PostgreSQL, and LLM features on Google Cloud — and data science before it. Every role, every outcome, in full."
       />
       <Experience showHeading={false} />
     </>

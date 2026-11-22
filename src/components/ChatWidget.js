@@ -14,10 +14,13 @@ const AUTO_OPEN_DELAY_MS = 1000;
 const SEEN_KEY = "bandibot-seen";
 
 const SUGGESTIONS = [
-  "What are you working on right now?",
-  "What's your experience with RAG?",
-  "Tell me about your GenAI projects",
+  "What are you building at Nimbus Teck?",
+  "How is this portfolio built?",
+  "Tell me about your RAG project",
 ];
+
+/** Dispatch this on `window` to open the panel from anywhere on the page. */
+export const OPEN_CHAT_EVENT = "bandibot:open";
 
 const GREETING = `Hey — I'm ${profile.firstName} 👋 (well, an AI version of me, answering as myself). Before we dive in, what's your name, and which company are you with? Then ask me anything about my experience, projects, or background.`;
 
@@ -117,6 +120,13 @@ export default function ChatWidget() {
     if (seen) return;
     const timer = setTimeout(() => setOpen(true), AUTO_OPEN_DELAY_MS);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Lets other components (the hero's "Ask my AI" button) open the panel.
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener(OPEN_CHAT_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_CHAT_EVENT, onOpen);
   }, []);
 
   // Remember that the panel has been shown, so we don't auto-open it again.

@@ -1,7 +1,19 @@
 import Ambient from "@/components/Ambient";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { education, skills } from "@/data/resume";
+import SpotlightCard from "@/components/SpotlightCard";
+import { education, publication, skills } from "@/data/resume";
+
+// Bento layout on large screens: front end + back end share the first row,
+// cloud / databases / AI the second, and SEO & analytics closes as a strip.
+const SPANS = [
+  "lg:col-span-3",
+  "lg:col-span-3",
+  "lg:col-span-2",
+  "lg:col-span-2",
+  "lg:col-span-2",
+  "lg:col-span-6",
+];
 
 /** See the note on `Experience` — `showHeading` avoids a duplicate title. */
 export default function Skills({ showHeading = true }) {
@@ -15,54 +27,78 @@ export default function Skills({ showHeading = true }) {
       <Ambient variant="top" />
       {showHeading ? (
         <SectionHeading
-          index="04"
+          index="05"
           title="Capabilities"
           lead="The stack I build with, end to end."
         />
       ) : null}
 
-      <div className="border-fg/10 bg-fg/10 grid gap-px overflow-hidden rounded-2xl border sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         {skills.map((group, index) => (
           <Reveal
             key={group.title}
-            delay={0.04 * index}
-            className="group bg-bg hover:bg-fg/[0.035] p-7 transition-colors duration-500"
+            delay={0.05 * index}
+            className={SPANS[index] ?? "lg:col-span-2"}
           >
-            <h3 className="text-fg/45 group-hover:text-fg font-mono text-[11px] tracking-[0.18em] uppercase transition-colors duration-300">
-              {group.title}
-            </h3>
-            <span className="bg-fg/20 group-hover:from-accent group-hover:to-accent-2 mt-4 mb-5 block h-px w-8 transition-all duration-500 group-hover:w-16 group-hover:bg-gradient-to-r" />
-            <ul className="flex flex-wrap gap-x-3 gap-y-2">
-              {group.items.map((item) => (
-                <li
-                  key={item}
-                  className="text-fg/50 hover:text-accent text-sm transition-colors duration-300"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <SpotlightCard className="border-fg/10 bg-fg/[0.02] h-full rounded-3xl border p-7">
+              <div className="flex items-center justify-between">
+                <h3 className="text-fg/55 group-hover:text-fg font-mono text-[11px] tracking-[0.18em] uppercase transition-colors duration-300">
+                  {group.title}
+                </h3>
+                <span className="text-fg/15 font-mono text-[11px]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              </div>
+              <span className="bg-fg/20 group-hover:from-accent group-hover:to-accent-2 mt-4 mb-6 block h-px w-8 transition-all duration-500 group-hover:w-16 group-hover:bg-gradient-to-r" />
+              <ul className="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <li
+                    key={item}
+                    className="border-fg/10 text-fg/65 hover:border-accent/50 hover:text-accent bg-bg/40 rounded-full border px-3 py-1.5 text-sm transition-colors duration-300"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>
 
-      <Reveal delay={0.1} className="mt-6">
-        <div className="border-fg/10 hover:border-accent/40 flex flex-wrap items-baseline justify-between gap-4 rounded-2xl border p-7 transition-colors duration-500">
-          <div>
+      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+        {education.map((school, index) => (
+          <Reveal key={school.degree} delay={0.08 * index}>
+            <SpotlightCard className="border-fg/10 h-full rounded-3xl border p-7">
+              <span className="text-fg/40 font-mono text-[11px] tracking-[0.18em] uppercase">
+                Education
+              </span>
+              <h3 className="mt-3 text-xl font-semibold tracking-[-0.02em]">
+                {school.degree}
+              </h3>
+              <p className="text-fg/55 mt-1">{school.school}</p>
+              <p className="text-fg/40 mt-4 font-mono text-xs tracking-[0.14em] uppercase">
+                {school.period} · GPA {school.gpa}
+              </p>
+            </SpotlightCard>
+          </Reveal>
+        ))}
+        <Reveal delay={0.16}>
+          <SpotlightCard className="border-fg/10 h-full rounded-3xl border p-7">
             <span className="text-fg/40 font-mono text-[11px] tracking-[0.18em] uppercase">
-              Education
+              Publication · {publication.year}
             </span>
             <h3 className="mt-3 text-xl font-semibold tracking-[-0.02em]">
-              {education.degree}
+              {publication.title}
             </h3>
-            <p className="text-fg/50 mt-1">{education.school}</p>
-          </div>
-          <div className="text-fg/40 text-right font-mono text-xs tracking-[0.14em] uppercase">
-            <div>{education.date}</div>
-            <div className="mt-1">GPA {education.gpa}</div>
-          </div>
-        </div>
-      </Reveal>
+            <p className="text-fg/55 mt-1">
+              {publication.venue} · {publication.role}
+            </p>
+            <p className="text-fg/40 mt-4 font-mono text-xs tracking-[0.14em] uppercase">
+              {publication.note}
+            </p>
+          </SpotlightCard>
+        </Reveal>
+      </div>
     </section>
   );
 }

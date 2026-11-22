@@ -7,3 +7,5 @@ assets
 *.jpg
 *.jpeg
 *.ico
+.open-next
+.wrangler

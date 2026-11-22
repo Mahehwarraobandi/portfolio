@@ -1,7 +1,9 @@
 # Portfolio — Complete Project Documentation
 
-_Written 2026-07-20. This is a reference document only — writing it changed no
-code, no git history, and no cloud resource._
+_Written 2026-07-20; extended 2026-07-22 with **Part F**, which documents the
+sign-in gate, gated résumé, multi-page split, and the chatbot added afterwards.
+Parts A–E describe the original single-page site; where they disagree with Part
+F, Part F is current. This is a reference document only._
 
 **Live site: https://portfolio-px7cjqzlsq-vp.a.run.app**
 
@@ -17,6 +19,27 @@ code, no git history, and no cloud resource._
 - **Part E** is the practical stuff: commands, how to change things, open items.
 
 ---
+
+# UPDATE — moved to Cloudflare Workers (2026-11-22)
+
+Parts A3, B5 and the Cloud Run / Cloud Build / Firestore / Vertex AI details
+below describe the **original Google Cloud deployment** and are kept as
+history. Since 2026-11-22 the site runs on Cloudflare:
+
+| Before (GCP)                        | Now (Cloudflare)                               |
+| ----------------------------------- | ---------------------------------------------- |
+| Cloud Run container (`Dockerfile`)  | Worker built by `@opennextjs/cloudflare`       |
+| Cloud Build trigger on push to main | `npm run deploy` from the Mac (Wrangler)       |
+| Firestore (`portfoliodata`)         | D1 database `portfolio` (`migrations/`)        |
+| Gemini on Vertex AI                 | Workers AI, Llama 3.3 70B (`WORKERS_AI_MODEL`) |
+| Secret Manager                      | Worker secrets (`SESSION_SECRET`, `ADMIN_KEY`) |
+| CSP nonce in `src/proxy.js`         | CSP nonce in `worker.js` + `src/lib/csp.js`    |
+
+Content also switched to the TQL résumé track (Nimbus Teck, Ajanta Pharma,
+UMKC projects) and the UI was redesigned with heavier motion: floating glass
+nav, View-Transition theme switch, decoding role text, magnetic buttons, tilt
+portrait, velocity-skewed marquees, spotlight cards, stacking project cards,
+word-by-word scroll reveals, page transitions, and film grain.
 
 # PART A — The whole thing in plain English
 
@@ -876,12 +899,19 @@ The three that came from you correcting me:
 
 ## E5. Current state
 
-- Branch `main`, working tree clean, 5 commits, all pushed
-- Live at **https://portfolio-px7cjqzlsq-vp.a.run.app** — HTTP 200, ~0.58s
-- Running image `portfolio:59a656e` (SHA-tagged, traceable to that commit)
-- Runtime identity `portfolio-run@`, min 0 / max 10, public
-- Verified live: nonce CSP, HSTS, `X-Frame-Options: DENY`, nosniff; favicon and
-  OG image both return 200
+> Updated 2026-07-22. See **Part F** for the sign-in, résumé, and chatbot work.
+
+- Branch `main`, 7 commits, all pushed (latest `2c1a700`)
+- Live at **https://portfolio-px7cjqzlsq-vp.a.run.app** — six public pages plus
+  `/login`, `/resume`, `/visitors`, and `/api/chat`
+- Running revision `portfolio-00004` (image tagged `2c1a700`)
+- Runtime identity `portfolio-run@` with `datastore.user`, `aiplatform.user`,
+  and secretAccessor; min 0 / max 10, public
+- Backends: Firestore `portfoliodata` (collections `portfolio_visitors`,
+  `chat_sessions`); Gemini via Vertex AI; Secret Manager `SESSION_SECRET` +
+  `ADMIN_KEY`
+- Verified live: nonce CSP, security headers, the chatbot returns real
+  Gemini answers, and transcripts persist to Firestore
 - `npm run check` passes clean
 
 ## E6. Open items
@@ -893,3 +923,241 @@ The three that came from you correcting me:
 | 3   | `README.md` is still stock create-next-app text, never rewritten                                                                                           | Cosmetic               |
 | 4   | Custom domain requires a secret update **and** a rebuild — see E3                                                                                          | Future gotcha          |
 | 5   | The page is dynamically rendered, not static, as a consequence of nonce CSP — see D1                                                                       | By design; reversible  |
+
+---
+
+# PART F — Phase 2: multi-page, sign-in, résumé, and the chatbot
+
+_Added 2026-07-22. Parts A–E above describe the original single-page portfolio
+(commits through `59a656e`). This part documents everything built afterwards,
+across two commits — `237ea30` (sign-in, gated résumé, multi-page) and
+`2c1a700` (the chatbot). Where Parts A–E disagree with Part F, Part F is
+current._
+
+## F1. What changed, in one picture
+
+```
+BEFORE (Part A–E)                     AFTER (Part F)
+─────────────────                     ──────────────
+one page, all sections    ──►   six public pages: / /about /experience
+scroll-anchor nav                     /projects /skills /contact
+no backend                      ──►   sign-in gate + Firestore database
+no downloads                    ──►   gated résumé page + downloadable PDF
+static content only             ──►   AI chatbot (Gemini) on every page
+```
+
+Three user-facing capabilities were added:
+
+1. **A real multi-page site** — the single page split into routed pages.
+2. **Lead capture** — a recruiter signs in (name/email/company, no password),
+   the record lands in Firestore, and that unlocks a downloadable résumé PDF.
+3. **A portfolio chatbot** — a floating assistant that answers questions about
+   Maheshwar, powered by Gemini on Vertex AI, grounded in the résumé data.
+
+## F2. The multi-page refactor (`237ea30`)
+
+The old `src/app/page.js` rendered every section on one page. It was replaced by
+a **route group** — a folder named `(site)` whose parentheses mean "group these
+routes under a shared layout without adding a URL segment." So the file lives at
+`src/app/(site)/about/page.js` but the URL is just `/about`.
+
+| File                            | URL           | Contents                                                      |
+| ------------------------------- | ------------- | ------------------------------------------------------------- |
+| `src/app/(site)/layout.js`      | (wraps all)   | Nav + footer + `CursorGlow` + `ScrollProgress` + the chatbot  |
+| `src/app/(site)/page.js`        | `/`           | Hero, marquee, `Intro`, `Domains` (three practice-area boxes) |
+| `src/app/(site)/about/page.js`  | `/about`      | Portrait, narrative, achievements grid, career table          |
+| `src/app/(site)/experience/...` | `/experience` | Full timeline (reuses the `Experience` component)             |
+| `src/app/(site)/projects/...`   | `/projects`   | Project cards (reuses `Projects`)                             |
+| `src/app/(site)/skills/...`     | `/skills`     | Skill groups (reuses `Skills`)                                |
+| `src/app/(site)/contact/...`    | `/contact`    | Email/phone/LinkedIn + the "Download résumé" card             |
+
+New components introduced for this: **`PageHero`** (the masthead every sub-page
+opens with), **`Intro`** and **`Domains`** (home-page sections), **`NeuralArt`**
+(the animated neural-network SVG on the sign-in page). The section components
+(`Experience`, `Projects`, `Skills`) gained a `showHeading` prop so they don't
+render a duplicate title when they sit under a `PageHero`.
+
+`Nav.js` changed from scroll-anchor links (`#about`) to real route links
+(`/about`) with an active-state underline driven by `usePathname()`.
+
+## F3. Recruiter sign-in and the gate (`237ea30`)
+
+The chosen model is **passwordless**: a visitor enters name, email, company, and
+reason — no password, no account. On submit, the record is stored and a signed
+cookie is set that unlocks the résumé.
+
+- **`src/app/login/page.js`** — the sign-in page (outside the `(site)` group, so
+  no portfolio nav). Two-column: the `NeuralArt` panel and the form.
+- **`src/components/LoginForm.js`** — the client form, using React 19's
+  `useActionState` + `useFormStatus` for pending state and field errors.
+- **`src/app/login/actions.js`** — the Server Action. Rate-limits per IP,
+  validates, writes the visitor, sets the session cookie, then `redirect()`s to
+  the gated page (default `/resume`). Only same-origin `next` paths are honoured.
+- **`src/lib/validate.js`** — email/name/company validation. Accepts any real
+  provider (Gmail, Outlook, Yahoo, work domains); rejects malformed and
+  disposable-inbox addresses. Tags each email `work` vs `personal`.
+- **`src/lib/session.js`** — signed cookies. A small JSON payload + an HMAC-SHA256
+  signature (key from `SESSION_SECRET`). Nothing secret is _in_ the cookie; the
+  signature only stops forgery. Two scopes: `visitor` (30-day) and `admin`
+  (12-hour, for `/visitors`), and the two can't be swapped.
+
+## F4. The gated résumé and the downloadable PDF (`237ea30`)
+
+- **`src/app/resume/page.js`** — reads the session cookie; **no cookie →
+  `redirect('/login?next=%2Fresume')`**. Rendering is the security boundary
+  (there's no other route to this content). Shows the full résumé on screen plus
+  a **Download PDF** button.
+- **`public/resume.pdf`** — the actual file, **committed** to the repo.
+- **`scripts/generate-resume.mjs`** (`npm run generate:resume`) — generates that
+  PDF with **pdfkit** (a devDependency) from `src/data/resume.js`, so the file
+  can't drift from the site. Section order mirrors the user's Word résumé:
+  Professional Summary → Core Technical Competencies → Professional Experience →
+  Key Projects → Education. **Gotcha:** the built-in Helvetica font is
+  WinAnsi-encoded and has no "→" glyph, so a `clean()` helper rewrites arrows to
+  `->` (see the medical-QA project bullet).
+
+The "Download résumé" entry points (nav button + contact-page card) link to
+`/login?next=%2Fresume`, so every download is attributed to a signed-in visitor.
+
+## F5. The private `/visitors` admin page (`237ea30`)
+
+- **`src/app/visitors/page.js`** — reads an `admin` cookie; without it, shows an
+  unlock form; with it, lists all captured sign-ins (most recent first).
+- **`src/components/UnlockForm.js`** + **`src/app/visitors/actions.js`** — the
+  admin key is submitted through a **form (POST)**, never a query string, so it
+  never lands in access logs. Compared in constant time against `ADMIN_KEY`.
+  Wrong key gets a deliberate ~600 ms delay to blunt guessing.
+
+## F6. Firestore — the database (`237ea30`)
+
+- **`src/lib/visitors.js`** — the storage layer. In production it writes to
+  **Firestore Native**; locally (no GCP project env) it appends to a gitignored
+  `.data/*.jsonl` file so the whole flow is testable offline.
+- The database is a **named** database, **`portfoliodata`**, in location `nam5` —
+  there is no `(default)` one. So the client sets `databaseId` explicitly
+  (`FIRESTORE_DATABASE_ID=portfoliodata`). Missing that env → it hits a
+  nonexistent default and every write fails.
+- Auth is **ADC via the `portfolio-run` service account** — the same clean
+  pattern as the rest of the app. **There is no database password anywhere.**
+- Collections: **`portfolio_visitors`** (sign-ins) and, from `2c1a700`,
+  **`chat_sessions`** (chatbot transcripts).
+- Cost: the free tier (20k writes / 50k reads per _day_) covers a portfolio many
+  times over — realistically **$0/month**. This is why Firestore was chosen over
+  Cloud SQL, whose smallest instance would eat the entire $1–$10 budget just
+  sitting idle.
+
+## F7. Secrets and IAM added this phase
+
+Created in Secret Manager and mounted into Cloud Run via `--set-secrets`:
+
+| Secret           | Purpose                                   |
+| ---------------- | ----------------------------------------- |
+| `SESSION_SECRET` | HMAC key that signs the visitor cookie    |
+| `ADMIN_KEY`      | Unlocks the `/visitors` page (owner only) |
+
+The `portfolio-run` service account gained three roles across both commits:
+`roles/datastore.user` (Firestore), `secretmanager.secretAccessor` (on both
+secrets above), and `roles/aiplatform.user` (Vertex AI, for the chatbot).
+
+## F8. Small fixes bundled in
+
+- **LinkedIn URL** corrected to `linkedin.com/in/bandi-maheshwar-55987a298`
+  everywhere, via a single `profile.linkedin` + `profile.linkedinHandle` in
+  `resume.js` (the display text used to be hard-coded and drifted).
+- **Hero role clipping** — the rotating job title was clipped mid-word
+  ("Machine Learning Engir") because the rotator box was `min-w-[16ch]` with
+  `overflow-hidden`. Widened to `28ch` to clear the longest title.
+- **Résumé data made faithful to the Word doc** — added `profile.summaryResume`
+  (verbatim summary), `Regression`/`SVM`/`KNN` skills, and per-project
+  `resumeBullet` fields, all lifted from `MaheshwarRaoBandi.docx`.
+- **"View my work"** in the hero now routes to `/experience` (was a dead
+  `#experience` anchor after the multi-page split).
+
+## F9. The chatbot (`2c1a700`)
+
+A floating "Ask about Maheshwar" assistant on every page, powered by **Gemini on
+Vertex AI**.
+
+| File                           | Role                                                                 |
+| ------------------------------ | -------------------------------------------------------------------- |
+| `src/lib/chat.js`              | Builds the system prompt from `resume.js`; streams Gemini via Vertex |
+| `src/app/api/chat/route.js`    | The `/api/chat` endpoint: rate-limit → validate → stream → save      |
+| `src/components/ChatWidget.js` | The floating button + streaming chat panel                           |
+| `src/lib/visitors.js`          | `recordChat` / `listChats` → the `chat_sessions` collection          |
+
+**Key design decisions:**
+
+- **No RAG, no vector database.** The knowledge base is the résumé — a few
+  kilobytes — so the _whole thing_ is placed in the system prompt ("context
+  stuffing"). This is cheaper, simpler, and more accurate than retrieval at this
+  size. RAG only earns its keep when the corpus is too big to fit in the prompt.
+- **Auth is ADC via `portfolio-run`** — no API key. The `@google/genai` SDK runs
+  in `vertexai: true` mode with `project` + `location` (`us-central1`).
+- **Streaming.** The route returns a `ReadableStream` of plain text; the widget
+  reads it chunk-by-chunk with `response.body.getReader()`. CSP is unaffected —
+  the browser only calls same-origin `/api/chat` (`connect-src 'self'`).
+- **Abuse controls** (it's a public, unauthenticated LLM endpoint): per-IP rate
+  limit (12/min), input capped at 500 chars, output capped at 400 tokens, short
+  history window, and a system prompt that answers only about Maheshwar and
+  declines off-topic questions.
+- **Transcripts** are saved to `chat_sessions` _after_ the reply is sent
+  (best-effort — a storage hiccup never affects the visitor's answer).
+- **Local dev stub.** With no cloud credentials, `streamReply` yields a canned
+  `[local dev — Gemini runs in production]` reply instead of calling Vertex, so
+  the widget (UI, streaming, saving) is fully testable on `localhost` without
+  credentials. Real Gemini answers only where ADC exists — i.e. on Cloud Run.
+- **Model** is `gemini-2.5-flash`, overridable via the `GEMINI_MODEL` env var.
+
+## F10. New files, dependencies, and config
+
+**New runtime dependencies:** `@google-cloud/firestore` (database),
+`@google/genai` (Gemini). **New devDependency:** `pdfkit` (résumé PDF).
+
+**New `cloudbuild.yaml` deploy flags:**
+
+```
+--set-env-vars=GOOGLE_CLOUD_PROJECT=$PROJECT_ID,FIRESTORE_DATABASE_ID=portfoliodata,GOOGLE_CLOUD_LOCATION=us-central1
+--set-secrets=SESSION_SECRET=SESSION_SECRET:latest,ADMIN_KEY=ADMIN_KEY:latest
+```
+
+**New env vars the app reads:** `GOOGLE_CLOUD_PROJECT` (turns on Firestore +
+Vertex), `FIRESTORE_DATABASE_ID`, `GOOGLE_CLOUD_LOCATION`, `GEMINI_MODEL`
+(optional), plus the two secrets. **`.env.local`** (gitignored) holds local dev
+values (`SESSION_SECRET`, `ADMIN_KEY`); `.data/` (gitignored) holds the local
+JSONL fallback stores.
+
+## F11. The two Phase-2 commits
+
+| Commit    | Title                                                                             |
+| --------- | --------------------------------------------------------------------------------- |
+| `237ea30` | Add recruiter sign-in, gated résumé, and multi-page site                          |
+| `2c1a700` | Add portfolio chatbot: Gemini via Vertex AI with streaming and transcript capture |
+
+## F12. Updated cloud footprint and cost
+
+New GCP resources in play: **Firestore** database `portfoliodata` (nam5),
+**Vertex AI** (Gemini inference), **Secret Manager** entries `SESSION_SECRET` +
+`ADMIN_KEY`. All still comfortably inside **$1–$10/month**: Firestore is free-tier
+$0, Gemini Flash is a fraction of a cent per chat (rate-limited), and Cloud Run
+stays `min-instances=0`. Watch billing after a week to confirm real usage.
+
+## F13. How to make common Phase-2 changes
+
+| You want to…                   | Do this                                                                              |
+| ------------------------------ | ------------------------------------------------------------------------------------ |
+| Edit any résumé/site content   | `src/data/resume.js` — feeds pages, PDF, **and** the chatbot's knowledge             |
+| Regenerate the résumé PDF      | `npm run generate:resume` after editing `resume.js`, then commit `public/resume.pdf` |
+| Change how the chatbot behaves | The `systemPrompt()` in `src/lib/chat.js`                                            |
+| Switch chatbot model           | Set `GEMINI_MODEL` in `cloudbuild.yaml` (test with a live question after deploy)     |
+| Read visitor sign-ins          | `/visitors` on the live site, unlock with `ADMIN_KEY`                                |
+| Rotate the admin key           | New version of the `ADMIN_KEY` secret; redeploy                                      |
+
+## F14. Phase-2 open items
+
+| #   | Item                                                                                                                        | Severity     |
+| --- | --------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 1   | No UI yet to read `chat_sessions` — `listChats()` exists but isn't surfaced. Could add a tab to `/visitors`.                | Enhancement  |
+| 2   | Chatbot rate limit is in-memory per instance; with `max-instances=10` the effective limit is higher. Fine for a portfolio.  | By design    |
+| 3   | `gemini-2.5-flash` is the pinned model; a newer "Gemini 3.5 Flash" appeared in the console — one-line upgrade when desired. | Optional     |
+| 4   | The résumé PDF is a faithful re-typeset of the Word doc, not a pixel-identical export (no LibreOffice in the build).        | Cosmetic     |
+| 5   | `PROJECT_DOCUMENTATION.md` is untracked-then-committed by hand; it won't auto-update as code changes.                       | Keep in mind |
