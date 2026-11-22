@@ -72,9 +72,7 @@ function Bubble({ role, text }) {
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
-          isUser
-            ? "from-accent to-accent-2 bg-gradient-to-br text-white"
-            : "bg-fg/[0.05] text-fg/80"
+          isUser ? "text-bg bg-fg" : "bg-fg/[0.05] text-fg/80"
         }`}
       >
         {text || (
@@ -220,7 +218,7 @@ export default function ChatWidget() {
         transition={{ duration: 0.5, ease, delay: 1 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="from-accent to-accent-2 fixed right-5 bottom-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br text-white shadow-lg shadow-black/20"
+        className="text-bg bg-fg fixed right-5 bottom-5 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg shadow-black/20"
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
@@ -250,7 +248,7 @@ export default function ChatWidget() {
           >
             {/* Header */}
             <div className="border-fg/10 flex items-center gap-3 border-b px-5 py-4">
-              <span className="from-accent to-accent-2 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br text-white">
+              <span className="text-bg bg-fg flex h-9 w-9 items-center justify-center rounded-full">
                 <BotIcon className="h-5 w-5" />
               </span>
               <div>
@@ -306,7 +304,7 @@ export default function ChatWidget() {
                 type="submit"
                 disabled={busy || !input.trim()}
                 aria-label="Send"
-                className="from-accent to-accent-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-white transition-transform hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
+                className="text-bg bg-fg flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-transform hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
               >
                 {busy ? (
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />

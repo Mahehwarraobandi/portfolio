@@ -28,6 +28,9 @@
   `border-fg/10`, `text-accent`, etc.
 - **Do not hard-code `white` / `black` / `zinc-*` in components** — always use
   the semantic tokens so both themes stay correct.
+- **Keep it simple (user's request, 2026-11-22):** warm neutrals plus one muted
+  green accent. No gradients, gradient text, colour washes, glows or aurora
+  effects — the user felt they made the site look AI-generated.
 
 ## Assets
 

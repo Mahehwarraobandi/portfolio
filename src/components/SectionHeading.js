@@ -6,10 +6,10 @@ export default function SectionHeading({ index, title, lead }) {
     <div className="mb-16 lg:mb-20">
       <Reveal from="left">
         <div className="flex items-center gap-4">
-          <span className="from-accent to-accent-2 bg-gradient-to-r bg-clip-text font-mono text-xs tracking-[0.24em] text-transparent">
+          <span className="text-accent font-mono text-xs tracking-[0.24em]">
             {index}
           </span>
-          <span className="rule-gradient h-px w-12" />
+          <span className="bg-accent h-px w-12" />
           <span className="text-fg/50 font-mono text-xs tracking-[0.24em] uppercase">
             {title}
           </span>

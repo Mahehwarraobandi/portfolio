@@ -34,14 +34,14 @@ const OUT = path.join(ROOT, "public", "resume.pdf");
 
 await mkdir(path.dirname(OUT), { recursive: true });
 
-// Accent violet/cyan from globals.css, so the PDF matches the site.
-const ACCENT = "#6d28d9";
-const ACCENT_2 = "#0891b2";
-const INK = "#111114";
-const MUTED = "#55555f";
-const HAIRLINE = "#d8d8de";
+// The light theme's green accent and warm neutrals, so the PDF matches the site.
+const ACCENT = "#1d6b4c";
+const ACCENT_2 = "#1d6b4c";
+const INK = "#171717";
+const MUTED = "#57554f";
+const HAIRLINE = "#d8d6cf";
 
-const MARGIN = 38;
+const MARGIN = 36;
 const doc = new PDFDocument({
   size: "LETTER",
   margins: { top: MARGIN, bottom: MARGIN, left: MARGIN, right: MARGIN },
@@ -69,7 +69,7 @@ function ensure(space) {
 }
 
 function sectionTitle(label) {
-  ensure(46);
+  ensure(36);
   doc.moveDown(0.7);
   doc
     .font("Helvetica-Bold")
@@ -102,7 +102,7 @@ function bullet(text, { size = 8.6 } = {}) {
     align: "justify",
     lineGap: 1.1,
   });
-  doc.moveDown(0.2);
+  doc.moveDown(0.1);
 }
 
 /** "Left text ........ right text" on one line, e.g. a role and its dates. */
@@ -176,7 +176,7 @@ skills.forEach((group) => {
     .font("Helvetica")
     .fillColor(MUTED)
     .text(group.items.join(", "), { lineGap: 0.8 });
-  doc.moveDown(0.24);
+  doc.moveDown(0.14);
 });
 
 /* ---------------- Professional Experience ---------------- */
@@ -213,14 +213,14 @@ education.forEach((school) => {
     school.period,
     { size: 9.5 },
   );
-  doc.moveDown(0.3);
+  doc.moveDown(0.15);
 });
 
 /* ---------------- Publication ---------------- */
 
 sectionTitle("Publication");
 
-ensure(24);
+ensure(12);
 doc
   .font("Helvetica-Bold")
   .fontSize(9)

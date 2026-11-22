@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "motion/react";
-import Ambient from "@/components/Ambient";
 import Reveal from "@/components/Reveal";
 
 const ease = [0.22, 1, 0.36, 1];
@@ -21,7 +20,6 @@ export default function PageHero({ eyebrow, title, lead }) {
       id="top"
       className="relative overflow-hidden pt-36 pb-16 lg:pt-44 lg:pb-20"
     >
-      <Ambient variant="top" />
       <div className="grid-lines mask-radial pointer-events-none absolute inset-0 opacity-70" />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
@@ -31,7 +29,7 @@ export default function PageHero({ eyebrow, title, lead }) {
           </span>
         </Reveal>
 
-        <h1 className="text-gradient mt-7 text-[clamp(2.6rem,8vw,6rem)] leading-[0.95] font-semibold tracking-[-0.045em]">
+        <h1 className="mt-7 text-[clamp(2.6rem,8vw,6rem)] leading-[0.95] font-semibold tracking-[-0.045em]">
           {words.map((word, index) => (
             <span
               key={`${word}-${index}`}
@@ -53,7 +51,7 @@ export default function PageHero({ eyebrow, title, lead }) {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 1, ease, delay: 0.35 }}
-          className="rule-gradient mt-8 h-px w-40 origin-left"
+          className="bg-accent mt-8 h-px w-40 origin-left"
         />
 
         {lead ? (

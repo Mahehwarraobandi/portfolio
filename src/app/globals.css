@@ -11,70 +11,59 @@
    which wins over both blocks.
    --------------------------------------------------------------- */
 
+/* Calm, editorial palette: warm neutrals and a single muted green accent.
+   No gradients or colour washes — surfaces are flat, depth comes from
+   borders and type. --accent-3 is the error colour. */
+
 :root,
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #12122a; /* deep indigo-navy — colored, not black */
-  --bg-elevated: #1b1b3d;
-  --fg: #f6f5ff;
+  --bg: #121311; /* warm charcoal */
+  --bg-elevated: #1b1c1a;
+  --fg: #ecebe6;
 
-  --accent-1: #9a8bff; /* violet */
-  --accent-2: #34dbf0; /* cyan   */
-  --accent-3: #f871bd; /* pink   */
+  --accent-1: #7cc4a0; /* sage green */
+  --accent-2: #9ad3b6;
+  --accent-3: #e58f7f; /* errors */
 
-  /* Ambient washes layered behind sections — richer, since the base is
-     already tinted, so the colour reads clearly. */
-  --wash-1: rgba(154, 139, 255, 0.24);
-  --wash-2: rgba(52, 219, 240, 0.18);
-  --wash-3: rgba(248, 113, 189, 0.15);
-  --sheen: rgba(255, 255, 255, 0.06);
-  --grid-line: rgba(255, 255, 255, 0.05);
-  --scrollbar: #2a2a4c;
-  --scrollbar-hover: #45456e;
+  --grid-line: rgba(255, 255, 255, 0.04);
+  --scrollbar: #2c2d2a;
+  --scrollbar-hover: #464843;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
     color-scheme: light;
 
-    --bg: #e7e6fb; /* clear lavender/periwinkle — visibly colored */
-    --bg-elevated: #f6f5ff;
-    --fg: #191634;
+    --bg: #f6f5f1; /* warm off-white */
+    --bg-elevated: #ffffff;
+    --fg: #171717;
 
-    --accent-1: #7c3aed; /* vivid violet */
-    --accent-2: #0891b2; /* teal-cyan   */
-    --accent-3: #db2777; /* pink        */
+    --accent-1: #1d6b4c; /* forest green */
+    --accent-2: #175a3f;
+    --accent-3: #b3412f; /* errors */
 
-    /* Strong washes so the ambient colour blobs actually read on light. */
-    --wash-1: rgba(124, 58, 237, 0.22);
-    --wash-2: rgba(8, 145, 178, 0.18);
-    --wash-3: rgba(219, 39, 119, 0.16);
-    --sheen: rgba(25, 22, 52, 0.05);
-    --grid-line: rgba(25, 22, 52, 0.07);
-    --scrollbar: #cec9f0;
-    --scrollbar-hover: #afa6e2;
+    --grid-line: rgba(23, 23, 23, 0.05);
+    --scrollbar: #d8d6cf;
+    --scrollbar-hover: #bdbab1;
   }
 }
 
 [data-theme="light"] {
   color-scheme: light;
 
-  --bg: #e7e6fb; /* clear lavender/periwinkle — visibly colored */
-  --bg-elevated: #f6f5ff;
-  --fg: #191634;
+  --bg: #f6f5f1;
+  --bg-elevated: #ffffff;
+  --fg: #171717;
 
-  --accent-1: #7c3aed; /* vivid violet */
-  --accent-2: #0891b2; /* teal-cyan   */
-  --accent-3: #db2777; /* pink        */
+  --accent-1: #1d6b4c;
+  --accent-2: #175a3f;
+  --accent-3: #b3412f;
 
-  --wash-1: rgba(124, 58, 237, 0.22);
-  --wash-2: rgba(8, 145, 178, 0.18);
-  --wash-3: rgba(219, 39, 119, 0.16);
-  --sheen: rgba(25, 22, 52, 0.05);
-  --grid-line: rgba(25, 22, 52, 0.07);
-  --scrollbar: #cec9f0;
-  --scrollbar-hover: #afa6e2;
+  --grid-line: rgba(23, 23, 23, 0.05);
+  --scrollbar: #d8d6cf;
+  --scrollbar-hover: #bdbab1;
 }
 
 @theme inline {
@@ -92,9 +81,7 @@
   --animate-marquee-reverse: marquee-reverse 48s linear infinite;
   --animate-spin-slow: spin 24s linear infinite;
   --animate-spin-slower: spin 40s linear infinite reverse;
-  --animate-drift: drift 18s ease-in-out infinite;
   --animate-float: float 7s ease-in-out infinite;
-  --animate-aurora: aurora 22s ease-in-out infinite;
 }
 
 @keyframes marquee {
@@ -125,41 +112,6 @@
   }
 }
 
-@keyframes aurora {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
-  }
-  33% {
-    transform: translate3d(4%, -3%, 0) rotate(8deg) scale(1.08);
-  }
-  66% {
-    transform: translate3d(-3%, 4%, 0) rotate(-6deg) scale(0.96);
-  }
-}
-
-@keyframes shimmer {
-  from {
-    background-position: 0% 50%;
-  }
-  to {
-    background-position: 200% 50%;
-  }
-}
-
-/* Registered so the conic border angle can animate smoothly. */
-@property --angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes border-spin {
-  to {
-    --angle: 360deg;
-  }
-}
-
 /* Theme switch: ThemeToggle animates a circular clip-path on the new
    snapshot, so the default cross-fade is switched off. */
 ::view-transition-old(root),
@@ -172,18 +124,6 @@
 [data-theme-switching] *::before,
 [data-theme-switching] *::after {
   transition: none !important;
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.75;
-  }
-  50% {
-    transform: translate3d(3%, -4%, 0) scale(1.08);
-    opacity: 1;
-  }
 }
 
 html {
@@ -203,7 +143,7 @@ body {
 
 ::selection {
   background: var(--accent-1);
-  color: #ffffff;
+  color: var(--bg);
 }
 
 ::-webkit-scrollbar {
@@ -241,56 +181,8 @@ body {
   background-size: 80px 80px;
 }
 
-/* Gradient text used for headline accents. */
-@utility text-gradient {
-  background-image: linear-gradient(
-    115deg,
-    var(--fg) 0%,
-    var(--fg) 38%,
-    var(--accent-1) 68%,
-    var(--accent-2) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-/* Hairline gradient rule. */
-@utility rule-gradient {
-  background-image: linear-gradient(
-    to right,
-    var(--accent-1),
-    var(--accent-2),
-    transparent
-  );
-}
-
-/* 1px gradient border on a rounded surface. */
-@utility ring-gradient {
-  background:
-    linear-gradient(var(--bg), var(--bg)) padding-box,
-    linear-gradient(135deg, var(--accent-1), var(--accent-2)) border-box;
-  border: 1px solid transparent;
-}
-
 @utility text-balance-tight {
   text-wrap: balance;
-}
-
-/* Accent gradient that slowly travels across the text. */
-@utility text-shimmer {
-  background-image: linear-gradient(
-    90deg,
-    var(--accent-1),
-    var(--accent-2),
-    var(--accent-3),
-    var(--accent-1)
-  );
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: shimmer 6s linear infinite;
 }
 
 /* Hollow display type for the footer wordmark. */
@@ -325,36 +217,4 @@ body {
 /* Fine film grain, laid over the whole page at very low opacity. */
 @utility grain {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* 1px conic border that rotates around a rounded surface. */
-@utility border-spin {
-  position: relative;
-  isolation: isolate;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    padding: 1px;
-    border-radius: inherit;
-    background: conic-gradient(
-      from var(--angle),
-      transparent 0deg,
-      var(--accent-1) 70deg,
-      var(--accent-2) 140deg,
-      transparent 200deg,
-      transparent 360deg
-    );
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#000 0 0) content-box exclude,
-      linear-gradient(#000 0 0);
-    animation: border-spin 6s linear infinite;
-    pointer-events: none;
-  }
 }

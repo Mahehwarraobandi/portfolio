@@ -14,9 +14,9 @@ function Window({ title, children }) {
   return (
     <div className="border-fg/10 bg-bg/70 relative h-full overflow-hidden rounded-2xl border shadow-2xl shadow-black/20">
       <div className="border-fg/10 flex items-center gap-2 border-b px-4 py-3">
-        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+        <span className="bg-fg/15 h-2.5 w-2.5 rounded-full" />
+        <span className="bg-fg/15 h-2.5 w-2.5 rounded-full" />
+        <span className="bg-fg/15 h-2.5 w-2.5 rounded-full" />
         <span className="text-fg/35 ml-3 truncate font-mono text-[10px] tracking-[0.12em]">
           {title}
         </span>
@@ -26,49 +26,64 @@ function Window({ title, children }) {
   );
 }
 
-/** Portfolio: a chat exchange that types itself out. */
-function ChatPreview({ reduced }) {
-  const lines = [
-    { from: "user", text: "How is this site built?" },
+/**
+ * Help-desk RAG: a support question answered from docs with a cited source,
+ * then routed. Illustrative example content, not real data.
+ */
+function HelpDeskPreview({ reduced }) {
+  const steps = [
     {
-      from: "bot",
-      text: "Next.js on Cloudflare Workers — D1 for data, Workers AI streaming my answers.",
+      key: "question",
+      node: (
+        <div className="flex justify-end">
+          <span className="text-bg bg-fg max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed">
+            How do I reset my VPN token?
+          </span>
+        </div>
+      ),
     },
-    { from: "user", text: "And the résumé?" },
+    {
+      key: "answer",
+      node: (
+        <div className="bg-fg/[0.06] text-fg/75 max-w-[90%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed">
+          Open the self-service portal, go to Security, and choose Reset token.{" "}
+          <span className="text-accent font-mono">[1]</span>
+          <span className="border-fg/10 text-fg/45 mt-2 block border-t pt-2 font-mono text-[10px]">
+            [1] IT handbook · Remote access
+          </span>
+        </div>
+      ),
+    },
+    {
+      key: "route",
+      node: (
+        <div className="flex flex-wrap gap-2">
+          {["Category: Access", "Routed: IT queue"].map((tag) => (
+            <span
+              key={tag}
+              className="border-fg/15 text-fg/60 rounded-full border px-2.5 py-1 font-mono text-[10px]"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      ),
+    },
   ];
   return (
-    <Window title="portfolio — Bandi Bot">
+    <Window title="help-desk — answer with sources">
       <div className="space-y-3">
-        {lines.map((line, i) => (
+        {steps.map((step, i) => (
           <motion.div
-            key={line.text}
+            key={step.key}
             initial={reduced ? false : { opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease, delay: 0.3 + i * 0.6 }}
-            className={`flex ${line.from === "user" ? "justify-end" : ""}`}
           >
-            <span
-              className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
-                line.from === "user"
-                  ? "from-accent to-accent-2 bg-gradient-to-br text-white"
-                  : "bg-fg/[0.06] text-fg/75"
-              }`}
-            >
-              {line.text}
-            </span>
+            {step.node}
           </motion.div>
         ))}
-        <div className="bg-fg/[0.06] inline-flex gap-1 rounded-2xl px-3.5 py-2.5">
-          {[0, 1, 2].map((dot) => (
-            <motion.span
-              key={dot}
-              animate={reduced ? undefined : { opacity: [0.2, 1, 0.2] }}
-              transition={{ duration: 1.2, repeat: Infinity, delay: dot * 0.2 }}
-              className="bg-fg/50 block h-1.5 w-1.5 rounded-full"
-            />
-          ))}
-        </div>
       </div>
     </Window>
   );
@@ -101,7 +116,7 @@ function MatchPreview({ reduced }) {
                 viewport={{ once: true }}
                 transition={{ duration: 1.1, ease, delay: 0.2 + i * 0.15 }}
                 style={reduced ? { width: `${job.score}%` } : undefined}
-                className="from-accent to-accent-2 h-full rounded-full bg-gradient-to-r"
+                className="bg-accent h-full rounded-full"
               />
             </div>
           </div>
@@ -129,7 +144,7 @@ function MetricsPreview({ reduced }) {
                 viewport={{ once: true }}
                 transition={{ duration: 1.2, ease, delay: 0.25 + i * 0.2 }}
                 style={reduced ? { height: `${bar.value}%` } : undefined}
-                className="from-accent-2 to-accent relative w-full rounded-t-xl bg-gradient-to-t"
+                className="bg-accent relative w-full rounded-t-xl"
               >
                 <span className="text-fg/80 absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-xs">
                   {bar.value}%
@@ -146,14 +161,13 @@ function MetricsPreview({ reduced }) {
   );
 }
 
-const PREVIEWS = [ChatPreview, MatchPreview, MetricsPreview];
+const PREVIEWS = [HelpDeskPreview, MatchPreview, MetricsPreview];
 
 export default function ProjectVisual({ index }) {
   const reduced = useReducedMotion();
   const Preview = PREVIEWS[index % PREVIEWS.length];
   return (
     <div aria-hidden="true" className="relative h-full">
-      <div className="absolute inset-[-10%] rounded-full bg-[radial-gradient(circle,var(--wash-1),transparent_65%)] blur-2xl" />
       <div className="relative h-full">
         <Preview reduced={reduced} />
       </div>

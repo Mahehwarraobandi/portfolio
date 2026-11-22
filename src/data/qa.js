@@ -16,7 +16,7 @@ export const qa = [
   // ── Technical ──────────────────────────────────────────────────────────
   {
     q: "What do you work on at Nimbus Teck?",
-    a: "I'm a Full Stack Engineer at Nimbus Teck in Topeka, and I work across the whole stack. On the front end I build responsive components in Next.js, React, and Tailwind CSS. On the back end I build REST APIs in FastAPI with endpoints to create and retrieve records, streaming LLM features on Gemini via Vertex AI, and webhook and ETL integrations between systems. I set up PostgreSQL databases — schema design, queries, input validation, and sign-in-gated access — and I deploy on Google Cloud: containerized services on Cloud Run, Cloud Build CI/CD from GitHub, images in Artifact Registry, and secrets in Secret Manager. I also handle technical SEO, and I automated reporting, data prep, and document handling, which cut about 40% of the team's weekly manual work.",
+    a: "I'm a Full Stack Engineer at Nimbus Teck in Topeka, and I work across the whole stack. On the front end I build responsive components in Next.js, React, and Tailwind CSS. On the back end I build REST APIs in FastAPI with endpoints to create and retrieve records, streaming LLM features on Gemini via Vertex AI, and webhook and ETL integrations between systems. I set up PostgreSQL databases — schema design, queries, input validation, and sign-in-gated access. I deploy containerized services on Google Cloud Run with Cloud Build CI/CD and Secret Manager, and I've built serverless APIs on Cloudflare Workers with files stored in Cloudflare R2. I also handle technical SEO, and I automated reporting, data prep, and document handling, which cut about 40% of the team's weekly manual work.",
   },
   {
     q: "Walk me through the architecture of this portfolio site.",
@@ -24,7 +24,7 @@ export const qa = [
   },
   {
     q: "Why does your portfolio chatbot stuff the résumé into the prompt instead of using RAG?",
-    a: "Because the corpus is tiny. Everything the bot needs — my résumé and a bank of my own answers — fits comfortably in the system prompt, so a vector database and retrieval step would only add cost, latency, and a way to fetch the wrong chunk. RAG earns its place when the knowledge is too big or changes too often to fit in context; that's why I used embeddings and vector search in the Career Navigator, where the system matches résumés against large, changing job listings. Picking the simpler design when it's enough is the point.",
+    a: "Because the corpus is tiny. Everything the bot needs — my résumé and a bank of my own answers — fits comfortably in the system prompt, so a vector database and retrieval step would only add cost, latency, and a way to fetch the wrong chunk. RAG earns its place when the knowledge is too big or changes too often to fit in context — like the Career Navigator, which matches résumés against large, changing job listings with embeddings and vector search, or the Help-Desk RAG platform I'm building, which answers from company docs with pgvector and cites its sources. Picking the simpler design when it's enough is the point.",
   },
   {
     q: "How do you stream LLM responses to the browser?",
@@ -37,6 +37,14 @@ export const qa = [
   {
     q: "How do you design and secure a REST API?",
     a: "I start from the data model: a PostgreSQL schema designed for the queries the API actually needs, then FastAPI endpoints to create and retrieve records with request validation at the boundary, so bad input is rejected before it touches the database. Access is gated behind sign-in where it should be. For anything public I add rate limiting and hard input caps, keep secrets in a secrets manager rather than in code, and log failures without leaking internals in error messages. Webhook and ETL integrations get the same treatment — validate what comes in, and make failures visible rather than silent.",
+  },
+  {
+    q: "Tell me about the Help-Desk RAG Platform you're building.",
+    a: "It's a personal project I'm building now: a full-stack help-desk platform with a Next.js front end, a FastAPI back end, and PostgreSQL with pgvector. It answers support questions from company docs and cites its sources, so an agent or customer can check where every answer came from. I'm adding automatic ticket classification and routing, an agent dashboard, and an evaluation harness to measure answer quality — I want the numbers before I deploy it on Google Cloud Run. It's still in progress, so I don't have production results to share yet.",
+  },
+  {
+    q: "Have you worked with Cloudflare?",
+    a: "Yes. At Nimbus Teck I built serverless APIs on Cloudflare Workers and stored files in Cloudflare R2 object storage. This portfolio runs on Cloudflare too — Workers for the site and API, D1 for storage, and Workers AI for this chat.",
   },
   {
     q: "Tell me about the AI-Powered Career Navigator.",
@@ -70,7 +78,7 @@ export const qa = [
   // ── Personal / recruiter ───────────────────────────────────────────────
   {
     q: "Tell me about yourself. / Give me an introduction.",
-    a: "I'm a full stack AI engineer based in Topeka, Kansas, with 2+ years building web apps, APIs, and LLM tools. At Nimbus Teck I build Next.js and React front ends, FastAPI back ends with PostgreSQL, and streaming LLM features on Gemini via Vertex AI, deployed on Google Cloud — and I cut about 40% of the team's weekly manual work by automating reporting, data prep, and document handling. Before that I was a Data Scientist at Ajanta Pharma, where my forecasting models informed $50M+ in annual decisions. I have an M.S. in Data Science & Analytics from UMKC. I care more about solving the real problem than about the tool.",
+    a: "I'm a full stack AI engineer based in Topeka, Kansas, with 2+ years building web apps, APIs, and LLM tools. At Nimbus Teck I build Next.js and React front ends, FastAPI back ends with PostgreSQL, and streaming LLM features on Gemini via Vertex AI, deployed on Google Cloud Run and Cloudflare Workers — and I cut about 40% of the team's weekly manual work by automating reporting, data prep, and document handling. Before that I was a Data Scientist at Ajanta Pharma, where my forecasting models informed $50M+ in annual decisions. I have an M.S. in Data Science & Analytics from UMKC. I care more about solving the real problem than about the tool.",
   },
   {
     q: "What is your current work authorization?",

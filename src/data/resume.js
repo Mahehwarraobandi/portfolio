@@ -46,8 +46,11 @@ export const marquee = [
   "FastAPI",
   "Python",
   "PostgreSQL",
+  "pgvector",
   "Firestore",
   "Cloud Run",
+  "Cloudflare Workers",
+  "Cloudflare R2",
   "Vertex AI",
   "Gemini",
   "GPT-4",
@@ -73,7 +76,8 @@ export const experience = [
     bullets: [
       "Built responsive front-end components in Next.js, React, and Tailwind CSS (JavaScript) for web applications.",
       "Developed back-end REST APIs in FastAPI (Python) with endpoints to create and retrieve records, streaming LLM features on Gemini via Vertex AI, and webhook and ETL integrations across systems.",
-      "Deployed on Google Cloud: containerized services on Cloud Run with Cloud Build CI/CD from GitHub, images in Artifact Registry, and secrets in Secret Manager.",
+      "Deployed containerized services on Google Cloud Run with Cloud Build CI/CD and Secret Manager.",
+      "Built serverless APIs on Cloudflare Workers and stored files in Cloudflare R2 object storage.",
       "Set up PostgreSQL databases with SQL schema design and queries, input validation, and sign-in-gated access.",
       "Improved search visibility with technical SEO: metadata, canonical URLs, Open Graph, JSON-LD, and sitemaps.",
       "Cut weekly manual work about 40% by automating reporting, data prep, and document handling, and shipped AI/ML models as live services with automated monitoring and retraining.",
@@ -90,8 +94,9 @@ export const experience = [
       "PostgreSQL",
       "Cloud Run",
       "Cloud Build",
-      "Artifact Registry",
       "Secret Manager",
+      "Cloudflare Workers",
+      "Cloudflare R2",
       "Webhooks",
       "Technical SEO",
     ],
@@ -122,34 +127,31 @@ export const experience = [
 export const projects = [
   {
     index: "01",
-    title: "Full-Stack AI Portfolio Platform",
+    title: "Help-Desk RAG Platform",
     org: "Personal",
     period: "2026",
     description:
-      "This site. A Next.js and React front end with a streaming AI chat assistant that answers as me, an admin-only visitors view, nonce-based CSP headers, and technical SEO. First shipped on Google Cloud — Cloud Run via Cloud Build, Firestore, and Gemini on Vertex AI — and now running on Cloudflare Workers with D1 and Workers AI.",
+      "In progress. A full-stack help-desk platform — Next.js front end, FastAPI back end, PostgreSQL with pgvector — that answers support questions from company docs with cited sources. Next up: automatic ticket classification and routing, an agent dashboard, and an evaluation harness that measures answer quality before it ships on Google Cloud Run.",
     // Verbatim résumé bullets, used by the downloadable PDF.
     bullets: [
-      "Built a portfolio site with an AI chatbot: Next.js and React front end, streaming Gemini chat API, Firestore, recruiter sign-in with a gated resume, CSP headers, and technical SEO, deployed on Cloud Run via Cloud Build.",
+      "Building a full-stack help-desk platform with a Next.js front end, FastAPI back end, and PostgreSQL with pgvector that answers support questions from company docs with cited sources (RAG).",
+      "Adding automatic ticket classification and routing, an agent dashboard, and an evaluation harness to measure answer quality before deploying on Google Cloud Run.",
     ],
-    metric: "Live — you're on it",
+    metric: "In progress",
     metricLabel: "Status",
     stack: [
       "Next.js",
-      "React",
-      "Tailwind CSS",
-      "Streaming chat API",
-      "Cloud Run",
-      "Cloud Build",
-      "Firestore",
-      "Vertex AI (Gemini)",
-      "Cloudflare Workers",
-      "D1",
-      "Workers AI",
+      "FastAPI",
+      "PostgreSQL",
+      "pgvector",
+      "RAG",
+      "Ticket routing",
+      "Google Cloud Run",
     ],
   },
   {
     index: "02",
-    title: "AI-Powered Career Navigator",
+    title: "AI-Powered Career Navigator (Full Stack, RAG)",
     org: "UMKC",
     period: "2025",
     description:
@@ -175,7 +177,7 @@ export const projects = [
   },
   {
     index: "03",
-    title: "Employee Feedback & Skill Prediction Platform",
+    title: "AI-Powered Employee Feedback & Skill Prediction Platform",
     org: "UMKC",
     period: "2024",
     description:
@@ -218,17 +220,17 @@ export const skills = [
   {
     title: "Cloud & DevOps",
     items: [
-      "Google Cloud (Cloud Run, Cloud Build, Secret Manager, Vertex AI)",
+      "GCP (Cloud Run, Cloud Build, Vertex AI)",
+      "Cloudflare (Workers, R2)",
       "Docker",
       "CI/CD",
       "AWS",
-      "Azure",
     ],
   },
   {
     title: "Databases",
     items: [
-      "PostgreSQL",
+      "PostgreSQL (pgvector)",
       "SQL",
       "Schema design",
       "MySQL",
@@ -260,6 +262,10 @@ export const skills = [
       "Power BI",
       "Plotly",
     ],
+  },
+  {
+    title: "Operating Systems",
+    items: ["Windows 11 Pro", "macOS (Dell and Mac laptops)"],
   },
 ];
 
@@ -319,11 +325,11 @@ export const domains = [
     company: "Nimbus Teck Inc",
     period: "Sep 2025 — Present",
     blurb:
-      "Responsive Next.js, React, and Tailwind front ends on FastAPI REST back ends, with PostgreSQL schemas, input validation, and sign-in-gated access — deployed on Google Cloud through Cloud Build CI/CD.",
+      "Responsive Next.js, React, and Tailwind front ends on FastAPI REST back ends, with PostgreSQL schemas, input validation, and sign-in-gated access — deployed on Google Cloud Run with Cloud Build CI/CD, plus serverless APIs on Cloudflare Workers.",
     points: [
       "Next.js · React · Tailwind CSS",
       "FastAPI REST APIs + PostgreSQL",
-      "Cloud Run · Cloud Build · Secret Manager",
+      "Cloud Run · Cloudflare Workers · R2",
     ],
   },
   {
@@ -332,11 +338,11 @@ export const domains = [
     company: "Nimbus Teck · UMKC projects",
     period: "2024 — Present",
     blurb:
-      "Streaming LLM features on Gemini via Vertex AI, RAG over embeddings and vector search, and automation of reporting, data prep, and document handling.",
+      "Streaming LLM features on Gemini via Vertex AI, RAG with cited sources over pgvector and vector search, and automation of reporting, data prep, and document handling.",
     points: [
       "~40% less weekly manual work",
       "Streaming Gemini features",
-      "RAG + vector search (Career Navigator)",
+      "RAG: Help-Desk platform, Career Navigator",
     ],
   },
   {

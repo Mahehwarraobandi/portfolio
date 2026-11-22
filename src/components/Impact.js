@@ -21,14 +21,14 @@ export default function Impact() {
               <span className="text-fg/25 font-mono text-[10px] tracking-[0.24em]">
                 0{index + 1}
               </span>
-              <div className="text-gradient mt-8 text-[clamp(2.6rem,5vw,3.8rem)] leading-none font-semibold tracking-[-0.045em]">
+              <div className="mt-8 text-[clamp(2.6rem,5vw,3.8rem)] leading-none font-semibold tracking-[-0.045em]">
                 <Counter
                   value={stat.value}
                   prefix={stat.prefix}
                   suffix={stat.suffix}
                 />
               </div>
-              <span className="rule-gradient mt-6 block h-px w-10 transition-all duration-500 group-hover:w-24" />
+              <span className="bg-accent mt-6 block h-px w-10 transition-all duration-500 group-hover:w-24" />
               <p className="text-fg/50 mt-4 font-mono text-[11px] leading-relaxed tracking-[0.14em] uppercase">
                 {stat.label}
               </p>

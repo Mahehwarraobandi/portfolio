@@ -49,7 +49,7 @@ export default function Nav() {
           className="group glass border-fg/10 text-fg flex h-11 items-center gap-2 rounded-full border px-4 font-mono text-sm tracking-[0.2em] uppercase"
         >
           MRB
-          <span className="from-accent to-accent-2 inline-block h-1.5 w-1.5 rounded-full bg-gradient-to-br transition-transform duration-500 group-hover:scale-150" />
+          <span className="bg-accent inline-block h-1.5 w-1.5 rounded-full transition-transform duration-500 group-hover:scale-150" />
         </Link>
 
         <ul
@@ -79,7 +79,7 @@ export default function Nav() {
                 >
                   {link.label}
                   {active ? (
-                    <span className="from-accent to-accent-2 absolute -bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-gradient-to-br" />
+                    <span className="bg-accent absolute -bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full" />
                   ) : null}
                 </Link>
               </li>
@@ -91,7 +91,7 @@ export default function Nav() {
           <ThemeToggle />
           <Link
             href="/resume"
-            className="from-accent to-accent-2 hidden rounded-full bg-gradient-to-r px-5 py-2.5 font-mono text-xs tracking-[0.14em] text-white uppercase shadow-[0_8px_30px_-8px_var(--accent-1)] transition-transform duration-300 hover:scale-[1.04] md:inline-block"
+            className="text-bg bg-fg hidden rounded-full px-5 py-2.5 font-mono text-xs tracking-[0.14em] uppercase transition-transform duration-300 hover:scale-[1.04] md:inline-block"
           >
             Résumé ↓
           </Link>
@@ -141,7 +141,7 @@ export default function Nav() {
                     onClick={() => setOpen(false)}
                     aria-current={pathname === link.href ? "page" : undefined}
                     className={`flex items-baseline justify-between py-5 text-4xl font-semibold tracking-[-0.03em] ${
-                      pathname === link.href ? "text-shimmer" : "text-fg/80"
+                      pathname === link.href ? "text-accent" : "text-fg/80"
                     }`}
                   >
                     {link.label}
@@ -160,7 +160,7 @@ export default function Nav() {
               <Link
                 href="/resume"
                 onClick={() => setOpen(false)}
-                className="from-accent to-accent-2 block rounded-full bg-gradient-to-r py-4 text-center font-mono text-sm tracking-[0.14em] text-white uppercase"
+                className="text-bg bg-fg block rounded-full py-4 text-center font-mono text-sm tracking-[0.14em] uppercase"
               >
                 Download résumé ↓
               </Link>

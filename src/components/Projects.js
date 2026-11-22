@@ -2,7 +2,6 @@
 
 import { useRef, useSyncExternalStore } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import Ambient from "@/components/Ambient";
 import ProjectVisual from "@/components/ProjectVisual";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
@@ -40,7 +39,6 @@ function ProjectCard({ project, index, total, progress, stacking }) {
           style={stacking ? { scale } : undefined}
           className="border-fg/10 bg-elevated relative origin-top overflow-hidden rounded-[2rem] border shadow-2xl shadow-black/10"
         >
-          <div className="from-accent/[0.07] pointer-events-none absolute inset-0 bg-gradient-to-br via-transparent to-transparent" />
           <div className="relative grid gap-10 p-8 sm:p-10 lg:grid-cols-[1.1fr_1fr] lg:p-12">
             <div className="flex flex-col">
               <div className="flex flex-wrap items-center gap-3">
@@ -63,7 +61,7 @@ function ProjectCard({ project, index, total, progress, stacking }) {
                 <span className="text-fg/35 block font-mono text-[10px] tracking-[0.2em] uppercase">
                   {project.metricLabel}
                 </span>
-                <span className="text-shimmer mt-1 block text-xl font-semibold tracking-[-0.02em]">
+                <span className="text-accent mt-1 block text-xl font-semibold tracking-[-0.02em]">
                   {project.metric}
                 </span>
               </div>
@@ -110,12 +108,11 @@ export default function Projects({ showHeading = true }) {
         showHeading ? "py-28 lg:py-36" : "pt-8 pb-28 lg:pb-36"
       }`}
     >
-      <Ambient variant="top" />
       {showHeading ? (
         <SectionHeading
           index="04"
           title="Selected Projects"
-          lead="Things I built end to end — including the site you're on."
+          lead="Things I've built end to end — and one I'm building now."
         />
       ) : null}
 

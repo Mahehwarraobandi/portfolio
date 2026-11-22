@@ -69,8 +69,6 @@ export default function ContactPage() {
         {/* Résumé download — open to everyone, no sign-in. */}
         <Reveal delay={0.15} className="mt-8">
           <div className="border-fg/10 bg-fg/[0.02] relative overflow-hidden rounded-3xl border p-8 sm:p-10">
-            <div className="from-accent/[0.08] pointer-events-none absolute inset-0 bg-gradient-to-br to-transparent" />
-
             <div className="relative flex flex-wrap items-center justify-between gap-8">
               <div className="max-w-xl">
                 <span className="text-fg/40 font-mono text-[10px] tracking-[0.2em] uppercase">
@@ -92,9 +90,9 @@ export default function ContactPage() {
                 <a
                   href="/resume.pdf"
                   download="Maheshwar-Rao-Bandi-Resume.pdf"
-                  className="group from-accent to-accent-2 relative overflow-hidden rounded-full bg-gradient-to-r px-8 py-4 text-center font-mono text-xs tracking-[0.16em] text-white uppercase transition-transform duration-300 hover:scale-[1.03]"
+                  className="group text-bg bg-fg relative overflow-hidden rounded-full px-8 py-4 text-center font-mono text-xs tracking-[0.16em] uppercase transition-transform duration-300 hover:scale-[1.03]"
                 >
-                  <span className="from-accent-2 to-accent-3 absolute inset-0 -translate-x-full bg-gradient-to-r transition-transform duration-500 ease-out group-hover:translate-x-0" />
+                  <span className="bg-accent absolute inset-0 -translate-x-full transition-transform duration-500 ease-out group-hover:translate-x-0" />
                   <span className="relative z-10 inline-flex items-center gap-3">
                     Download résumé
                     <span className="transition-transform duration-300 group-hover:translate-y-0.5">

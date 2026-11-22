@@ -1,18 +1,19 @@
-import Ambient from "@/components/Ambient";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import SpotlightCard from "@/components/SpotlightCard";
 import { education, publication, skills } from "@/data/resume";
 
 // Bento layout on large screens: front end + back end share the first row,
-// cloud / databases / AI the second, and SEO & analytics closes as a strip.
+// cloud / databases / AI the second, then SEO & analytics beside the
+// operating systems.
 const SPANS = [
   "lg:col-span-3",
   "lg:col-span-3",
   "lg:col-span-2",
   "lg:col-span-2",
   "lg:col-span-2",
-  "lg:col-span-6",
+  "lg:col-span-4",
+  "lg:col-span-2",
 ];
 
 /** See the note on `Experience` — `showHeading` avoids a duplicate title. */
@@ -24,7 +25,6 @@ export default function Skills({ showHeading = true }) {
         showHeading ? "py-28 lg:py-36" : "pt-8 pb-28 lg:pb-36"
       }`}
     >
-      <Ambient variant="top" />
       {showHeading ? (
         <SectionHeading
           index="05"
@@ -49,7 +49,7 @@ export default function Skills({ showHeading = true }) {
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
-              <span className="bg-fg/20 group-hover:from-accent group-hover:to-accent-2 mt-4 mb-6 block h-px w-8 transition-all duration-500 group-hover:w-16 group-hover:bg-gradient-to-r" />
+              <span className="bg-fg/20 group-hover:bg-accent mt-4 mb-6 block h-px w-8 transition-all duration-500 group-hover:w-16" />
               <ul className="flex flex-wrap gap-2">
                 {group.items.map((item) => (
                   <li

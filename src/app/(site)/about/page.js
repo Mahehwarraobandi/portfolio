@@ -30,7 +30,7 @@ export default function AboutPage() {
       <section className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
         <div className="grid items-start gap-14 lg:grid-cols-[1fr_1.4fr]">
           <Reveal from="up" className="lg:sticky lg:top-28">
-            <div className="border-spin border-fg/10 relative aspect-square w-full overflow-hidden rounded-3xl">
+            <div className="border-fg/15 border-fg/10 relative aspect-square w-full overflow-hidden rounded-3xl border">
               <div className="absolute inset-[1px] overflow-hidden rounded-[calc(1.5rem-1px)]">
                 <Image
                   src="/portrait.jpg"
@@ -50,8 +50,8 @@ export default function AboutPage() {
               behind it, and the AI features that make it useful.
             </p>
             <p className="text-fg/60 mt-6 leading-relaxed">
-              At <span className="text-shimmer font-medium">Nimbus Teck</span>,
-              I build Next.js and React front ends, FastAPI back ends on
+              At <span className="text-accent font-medium">Nimbus Teck</span>, I
+              build Next.js and React front ends, FastAPI back ends on
               PostgreSQL, and streaming LLM features on Gemini via Vertex AI —
               deployed on Google Cloud with Cloud Build CI/CD. Automating
               reporting, data prep, and document handling there cut about 40% of
@@ -71,7 +71,7 @@ export default function AboutPage() {
                   delay={0.06 * index}
                   className="bg-bg hover:bg-fg/[0.04] p-6 transition-colors duration-500"
                 >
-                  <div className="text-gradient text-[clamp(1.6rem,3.2vw,2.4rem)] leading-none font-semibold tracking-[-0.03em]">
+                  <div className="text-[clamp(1.6rem,3.2vw,2.4rem)] leading-none font-semibold tracking-[-0.03em]">
                     <Counter
                       value={stat.value}
                       prefix={stat.prefix}
@@ -100,7 +100,7 @@ export default function AboutPage() {
           {achievements.map((item, index) => (
             <Reveal key={item.label} delay={0.04 * index} className="h-full">
               <SpotlightCard className="border-fg/10 bg-fg/[0.02] h-full rounded-3xl border p-7">
-                <div className="text-shimmer text-3xl font-semibold tracking-[-0.03em]">
+                <div className="text-accent text-3xl font-semibold tracking-[-0.03em]">
                   {item.metric}
                 </div>
                 <h3 className="text-fg/80 mt-4 text-sm leading-snug font-medium">
@@ -197,7 +197,7 @@ export default function AboutPage() {
           <Magnetic>
             <Link
               href="/experience"
-              className="group from-accent to-accent-2 inline-flex items-center gap-3 rounded-full bg-gradient-to-r px-7 py-3.5 font-mono text-xs tracking-[0.16em] text-white uppercase shadow-[0_10px_40px_-10px_var(--accent-1)]"
+              className="group text-bg bg-fg inline-flex items-center gap-3 rounded-full px-7 py-3.5 font-mono text-xs tracking-[0.16em] uppercase"
             >
               Read the full experience
               <span className="transition-transform duration-300 group-hover:translate-x-1">

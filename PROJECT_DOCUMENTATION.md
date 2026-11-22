@@ -39,7 +39,11 @@ Content also switched to the TQL résumé track (Nimbus Teck, Ajanta Pharma,
 UMKC projects) and the UI was redesigned with heavier motion: floating glass
 nav, View-Transition theme switch, decoding role text, magnetic buttons, tilt
 portrait, velocity-skewed marquees, spotlight cards, stacking project cards,
-word-by-word scroll reveals, page transitions, and film grain.
+word-by-word scroll reveals, page transitions, and film grain. Later the
+same day the palette was simplified at the user's request: warm off-white /
+charcoal with a single muted green accent, and every gradient, colour wash and
+glow removed. Content was also refreshed to the latest résumé (Cloudflare
+Workers + R2, pgvector, the in-progress Help-Desk RAG Platform).
 
 # PART A — The whole thing in plain English
 

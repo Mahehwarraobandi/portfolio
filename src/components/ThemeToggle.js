@@ -156,7 +156,7 @@ export default function ThemeToggle() {
       <motion.span
         animate={{ x: isDark ? 0 : 28 }}
         transition={{ type: "spring", stiffness: 500, damping: 34 }}
-        className="from-accent to-accent-2 flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br text-white"
+        className="text-bg bg-fg flex h-7 w-7 items-center justify-center overflow-hidden rounded-full"
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span

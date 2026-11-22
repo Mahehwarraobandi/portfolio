@@ -12,7 +12,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="from-accent to-accent-2 w-full rounded-full bg-gradient-to-r px-6 py-3.5 font-mono text-xs tracking-[0.16em] text-white uppercase transition-transform duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
+      className="text-bg bg-fg w-full rounded-full px-6 py-3.5 font-mono text-xs tracking-[0.16em] uppercase transition-transform duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
     >
       {pending ? "Checking…" : "Unlock"}
     </button>

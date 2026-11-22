@@ -55,7 +55,7 @@ export default function Domains() {
                   </span>
                 </div>
 
-                <span className="from-accent to-accent-2 mt-8 bg-gradient-to-r bg-clip-text font-mono text-[10px] tracking-[0.24em] text-transparent uppercase">
+                <span className="text-accent mt-8 font-mono text-[10px] tracking-[0.24em] uppercase">
                   {domain.period}
                 </span>
 
@@ -67,7 +67,7 @@ export default function Domains() {
                   {domain.company}
                 </p>
 
-                <span className="bg-fg/15 group-hover:from-accent group-hover:to-accent-2 my-6 block h-px w-10 transition-all duration-500 group-hover:w-20 group-hover:bg-gradient-to-r" />
+                <span className="bg-fg/15 group-hover:bg-accent my-6 block h-px w-10 transition-all duration-500 group-hover:w-20" />
 
                 <p className="text-fg/60 flex-1 text-sm leading-relaxed">
                   {domain.blurb}

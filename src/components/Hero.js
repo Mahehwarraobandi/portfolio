@@ -10,7 +10,6 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import Ambient from "@/components/Ambient";
 import { OPEN_CHAT_EVENT } from "@/components/ChatWidget";
 import Counter from "@/components/Counter";
 import Magnetic from "@/components/Magnetic";
@@ -85,11 +84,6 @@ function TiltPortrait() {
         <div className="animate-spin-slow border-fg/15 absolute inset-0 rounded-full border border-dashed" />
         <div className="animate-spin-slower border-accent/25 absolute inset-[4%] rounded-full border border-dotted" />
         <div className="border-fg/10 absolute inset-[8%] rounded-full border" />
-        <motion.div
-          animate={{ opacity: [0.4, 0.85, 0.4], scale: [1, 1.05, 1] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-[-8%] rounded-full bg-[conic-gradient(from_0deg,var(--wash-1),var(--wash-2),var(--wash-3),var(--wash-1))] blur-2xl"
-        />
         <div
           className="ring-fg/20 absolute inset-[14%] overflow-hidden rounded-full ring-1"
           style={{ transform: "translateZ(40px)" }}
@@ -126,7 +120,7 @@ function TiltPortrait() {
                 className="glass border-fg/15 text-fg/75 animate-float block rounded-full border px-3.5 py-1.5 font-mono text-[11px] tracking-[0.12em] whitespace-nowrap shadow-lg shadow-black/10"
                 style={{ animationDelay: `${chip.delay}s` }}
               >
-                <span className="from-accent to-accent-2 mr-2 inline-block h-1.5 w-1.5 rounded-full bg-gradient-to-br align-middle" />
+                <span className="bg-accent mr-2 inline-block h-1.5 w-1.5 rounded-full align-middle" />
                 {chip.label}
               </span>
             </motion.span>
@@ -145,13 +139,7 @@ export default function Hero() {
       id="top"
       className="relative flex min-h-svh items-center overflow-hidden pt-32 pb-20"
     >
-      <Ambient variant="top" />
       <div className="grid-lines mask-radial pointer-events-none absolute inset-0 opacity-80" />
-      {/* Slow aurora behind everything. */}
-      <div
-        aria-hidden="true"
-        className="animate-aurora pointer-events-none absolute top-[-30%] left-1/2 h-[80vh] w-[80vw] -translate-x-1/2 rounded-full bg-[conic-gradient(from_90deg,var(--wash-2),transparent_30%,var(--wash-1),transparent_70%,var(--wash-3))] opacity-60 blur-3xl"
-      />
 
       <div className="relative mx-auto grid w-full max-w-7xl items-center gap-16 px-6 lg:grid-cols-[1.3fr_1fr] lg:px-10">
         <div>
@@ -163,14 +151,14 @@ export default function Hero() {
           >
             <span className="relative flex h-2 w-2">
               <span className="bg-accent-2/70 absolute inline-flex h-full w-full animate-ping rounded-full" />
-              <span className="from-accent to-accent-2 relative inline-flex h-2 w-2 rounded-full bg-gradient-to-br" />
+              <span className="bg-accent relative inline-flex h-2 w-2 rounded-full" />
             </span>
             <span className="text-fg/65 font-mono text-[11px] tracking-[0.2em] uppercase">
               Open to full stack AI roles — {profile.location}
             </span>
           </motion.div>
 
-          <h1 className="text-gradient text-[clamp(2.75rem,8.5vw,7rem)] leading-[0.92] font-semibold tracking-[-0.045em]">
+          <h1 className="text-[clamp(2.75rem,8.5vw,7rem)] leading-[0.92] font-semibold tracking-[-0.045em]">
             {words.map((word, index) => (
               <span key={word} className="mr-[0.22em] inline-block">
                 <AnimatedWord word={word} delay={0.25 + index * 0.09} />
@@ -182,7 +170,7 @@ export default function Hero() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.1, ease, delay: 0.7 }}
-            className="rule-gradient my-8 h-px origin-left"
+            className="bg-accent my-8 h-px origin-left"
           />
 
           <motion.p
@@ -194,7 +182,7 @@ export default function Hero() {
             <span className="text-fg/40 font-mono text-sm">&gt;_</span>
             <ScrambleText
               words={profile.roles}
-              className="text-shimmer font-mono font-medium tracking-[-0.02em] whitespace-nowrap"
+              className="text-accent font-mono font-medium tracking-[-0.02em] whitespace-nowrap"
             />
           </motion.p>
 
@@ -216,9 +204,9 @@ export default function Hero() {
             <Magnetic>
               <Link
                 href="/projects"
-                className="group from-accent to-accent-2 relative block overflow-hidden rounded-full bg-gradient-to-r px-7 py-3.5 font-mono text-xs tracking-[0.16em] text-white uppercase shadow-[0_10px_40px_-10px_var(--accent-1)]"
+                className="group text-bg bg-fg relative block overflow-hidden rounded-full px-7 py-3.5 font-mono text-xs tracking-[0.16em] uppercase"
               >
-                <span className="from-accent-2 to-accent-3 absolute inset-0 -translate-x-full bg-gradient-to-r transition-transform duration-500 ease-out group-hover:translate-x-0" />
+                <span className="bg-accent absolute inset-0 -translate-x-full transition-transform duration-500 ease-out group-hover:translate-x-0" />
                 <span className="relative z-10">View my work</span>
               </Link>
             </Magnetic>
@@ -228,7 +216,7 @@ export default function Hero() {
                 onClick={() =>
                   window.dispatchEvent(new CustomEvent(OPEN_CHAT_EVENT))
                 }
-                className="group border-spin glass text-fg block rounded-full px-7 py-3.5 font-mono text-xs tracking-[0.16em] uppercase"
+                className="group border-fg/15 glass text-fg block rounded-full border px-7 py-3.5 font-mono text-xs tracking-[0.16em] uppercase"
               >
                 Ask my AI
                 <span className="ml-2 inline-block transition-transform duration-300 group-hover:translate-x-1">
@@ -250,7 +238,7 @@ export default function Hero() {
                 <dt className="text-fg/40 mt-2 font-mono text-[10px] leading-relaxed tracking-[0.14em] uppercase">
                   {stat.label}
                 </dt>
-                <dd className="text-gradient text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+                <dd className="text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
                   <Counter
                     value={stat.value}
                     prefix={stat.prefix}

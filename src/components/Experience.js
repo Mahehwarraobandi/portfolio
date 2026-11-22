@@ -15,7 +15,7 @@ function Role({ job }) {
         whileInView={{ scale: 1, opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="from-accent to-accent-2 absolute top-2 left-0 z-10 flex h-3.5 w-3.5 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-br shadow-[0_0_24px_var(--accent-1)]"
+        className="bg-accent absolute top-2 left-0 z-10 flex h-3.5 w-3.5 -translate-x-1/2 items-center justify-center rounded-full"
       >
         {job.current ? (
           <span className="bg-accent-2/60 absolute h-3.5 w-3.5 animate-ping rounded-full" />
@@ -32,7 +32,7 @@ function Role({ job }) {
             <h3 className="mt-4 text-[clamp(1.5rem,2.8vw,2.2rem)] leading-tight font-semibold tracking-[-0.03em]">
               {job.company}
             </h3>
-            <p className="text-shimmer mt-2 text-lg font-medium">{job.role}</p>
+            <p className="text-accent mt-2 text-lg font-medium">{job.role}</p>
             <div className="text-fg/45 mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] tracking-[0.14em] uppercase">
               <span>{job.period}</span>
               <span className="bg-fg/20 h-3 w-px" />
@@ -116,7 +116,7 @@ export default function Experience({ showHeading = true }) {
         <div className="bg-fg/10 absolute inset-y-0 left-0 w-px" />
         <motion.div
           style={{ scaleY, opacity }}
-          className="from-accent via-accent-2 to-accent-3 absolute inset-y-0 left-0 w-px origin-top bg-gradient-to-b"
+          className="bg-accent absolute inset-y-0 left-0 w-px origin-top"
         />
         {experience.map((job) => (
           <Role key={job.company} job={job} />

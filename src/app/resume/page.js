@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Ambient from "@/components/Ambient";
 import ThemeToggle from "@/components/ThemeToggle";
 import {
   education,
@@ -44,7 +43,6 @@ function Bullets({ items }) {
 export default function ResumePage() {
   return (
     <main className="relative min-h-svh overflow-hidden">
-      <Ambient variant="top" />
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-40" />
 
       <div className="relative z-10 mx-auto max-w-4xl px-6 py-10 lg:px-10">
@@ -62,7 +60,7 @@ export default function ResumePage() {
           <h1 className="text-[clamp(2.2rem,6vw,4rem)] leading-[1] font-semibold tracking-[-0.04em]">
             {profile.name}
           </h1>
-          <p className="text-shimmer mt-3 font-mono text-sm tracking-[0.12em] uppercase">
+          <p className="text-accent mt-3 font-mono text-sm tracking-[0.12em] uppercase">
             {profile.headline}
           </p>
           <div className="text-fg/50 mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
@@ -94,7 +92,7 @@ export default function ResumePage() {
           <a
             href="/resume.pdf"
             download="Maheshwar-Rao-Bandi-Resume.pdf"
-            className="group from-accent to-accent-2 mt-8 inline-flex items-center gap-3 rounded-full bg-gradient-to-r px-7 py-3.5 font-mono text-xs tracking-[0.16em] text-white uppercase transition-transform duration-300 hover:scale-[1.03]"
+            className="group text-bg bg-fg mt-8 inline-flex items-center gap-3 rounded-full px-7 py-3.5 font-mono text-xs tracking-[0.16em] uppercase transition-transform duration-300 hover:scale-[1.03]"
           >
             Download PDF
             <span className="transition-transform duration-300 group-hover:translate-y-0.5">

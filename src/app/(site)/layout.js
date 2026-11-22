@@ -1,6 +1,5 @@
 import ChatWidget from "@/components/ChatWidget";
 import Contact from "@/components/Contact";
-import CursorGlow from "@/components/CursorGlow";
 import Nav from "@/components/Nav";
 import ScrollProgress from "@/components/ScrollProgress";
 
@@ -16,7 +15,6 @@ export default function SiteLayout({ children }) {
   return (
     <>
       <ScrollProgress />
-      <CursorGlow />
       <Nav />
       <main className="relative z-10 flex-1">{children}</main>
       <Contact />

@@ -47,7 +47,7 @@ export default function Intro() {
             <ol className="border-fg/10 relative mt-6 space-y-7 border-l pl-6">
               {education.map((school) => (
                 <li key={school.degree} className="relative">
-                  <span className="from-accent to-accent-2 absolute top-1.5 -left-[29px] h-2.5 w-2.5 rounded-full bg-gradient-to-br" />
+                  <span className="bg-accent absolute top-1.5 -left-[29px] h-2.5 w-2.5 rounded-full" />
                   <h3 className="text-lg leading-snug font-semibold tracking-[-0.02em]">
                     {school.degree}
                   </h3>

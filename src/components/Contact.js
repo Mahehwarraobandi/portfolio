@@ -1,4 +1,3 @@
-import Ambient from "@/components/Ambient";
 import Magnetic from "@/components/Magnetic";
 import Reveal from "@/components/Reveal";
 import { profile } from "@/data/resume";
@@ -23,7 +22,6 @@ export default function Contact() {
       id="contact"
       className="border-fg/10 relative scroll-mt-24 overflow-hidden border-t"
     >
-      <Ambient variant="bottom" />
       <div className="grid-lines mask-radial pointer-events-none absolute inset-0 opacity-60" />
 
       <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-10 lg:px-10 lg:pt-36">
@@ -37,7 +35,7 @@ export default function Contact() {
           <h2 className="mt-8 text-[clamp(2.2rem,7vw,5.5rem)] leading-[0.98] font-semibold tracking-[-0.04em]">
             Let&apos;s build something
             <br />
-            <span className="text-shimmer">that ships.</span>
+            <span className="text-accent">that ships.</span>
           </h2>
         </Reveal>
 
@@ -45,9 +43,9 @@ export default function Contact() {
           <Magnetic className="mt-12">
             <a
               href={`mailto:${profile.email}`}
-              className="group from-accent to-accent-2 relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-gradient-to-r px-8 py-4 font-mono text-xs tracking-[0.16em] text-white uppercase shadow-[0_10px_40px_-10px_var(--accent-1)]"
+              className="group text-bg bg-fg relative inline-flex items-center gap-4 overflow-hidden rounded-full px-8 py-4 font-mono text-xs tracking-[0.16em] uppercase"
             >
-              <span className="from-accent-2 to-accent-3 absolute inset-0 -translate-x-full bg-gradient-to-r transition-transform duration-500 ease-out group-hover:translate-x-0" />
+              <span className="bg-accent absolute inset-0 -translate-x-full transition-transform duration-500 ease-out group-hover:translate-x-0" />
               <span className="relative z-10">{profile.email}</span>
               <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1.5">
                 →
@@ -82,11 +80,11 @@ export default function Contact() {
           ))}
         </div>
 
-        {/* Oversized wordmark — fills with the accent gradient on hover. */}
+        {/* Oversized outlined wordmark — fills in solid on hover. */}
         <Reveal delay={0.1} className="mt-24">
           <p
             aria-hidden="true"
-            className="group text-outline hover:from-accent hover:via-accent-2 hover:to-accent-3 cursor-default bg-clip-text text-center text-[clamp(2rem,9vw,7.25rem)] leading-none font-semibold tracking-[-0.06em] whitespace-nowrap transition-all duration-700 select-none hover:bg-gradient-to-r hover:[-webkit-text-stroke:0px]"
+            className="group text-outline hover:text-fg cursor-default text-center text-[clamp(2rem,9vw,7.25rem)] leading-none font-semibold tracking-[-0.06em] whitespace-nowrap transition-all duration-700 select-none hover:[-webkit-text-stroke:0px]"
           >
             {profile.name}
           </p>

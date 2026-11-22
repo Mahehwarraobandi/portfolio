@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import { motion, useMotionTemplate, useMotionValue } from "motion/react";
 
 /**
- * A surface with a soft light that follows the pointer, plus an accent ring on
- * hover. Colours come from the theme washes, so it recolours in light and dark.
+ * A surface with a faint neutral highlight that follows the pointer, plus an
+ * accent ring on hover. Monochrome on purpose — no colour washes.
  */
 export default function SpotlightCard({
   children,
@@ -18,7 +18,7 @@ export default function SpotlightCard({
   const mouseY = useMotionValue(0);
   const [hovered, setHovered] = useState(false);
 
-  const background = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, var(--wash-1), var(--wash-2) 45%, transparent 72%)`;
+  const background = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, color-mix(in oklab, var(--fg) 6%, transparent), transparent 70%)`;
 
   function onMouseMove(event) {
     const bounds = ref.current?.getBoundingClientRect();
