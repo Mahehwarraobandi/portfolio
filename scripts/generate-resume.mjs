@@ -14,7 +14,7 @@ import {
 } from "../src/data/resume.js";
 
 /**
- * Renders the résumé PDF served behind the sign-in gate.
+ * Renders the résumé PDF served at /resume.pdf.
  *
  * The section order, headings, and wording mirror the TQL résumé document
  * (mahesh_Resume.docx): Professional Summary → Technical Skills → Professional

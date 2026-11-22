@@ -66,8 +66,7 @@ export default function ContactPage() {
           ))}
         </div>
 
-        {/* Résumé download. Routed through the sign-in gate so every download
-            is attributed to a named visitor on the /visitors page. */}
+        {/* Résumé download — open to everyone, no sign-in. */}
         <Reveal delay={0.15} className="mt-8">
           <div className="border-fg/10 bg-fg/[0.02] relative overflow-hidden rounded-3xl border p-8 sm:p-10">
             <div className="from-accent/[0.08] pointer-events-none absolute inset-0 bg-gradient-to-br to-transparent" />
@@ -81,15 +80,18 @@ export default function ContactPage() {
                   Download the full résumé
                 </h2>
                 <p className="text-fg/50 mt-3 text-sm leading-relaxed">
-                  A short sign-in first — name, email, and company — then the
-                  PDF is yours. It lets me know who&apos;s reading and follow up
-                  properly.
+                  One page, straight to the point. Prefer reading it here? The{" "}
+                  <Link href="/resume" className="text-accent hover:underline">
+                    web version
+                  </Link>{" "}
+                  has the same content.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3">
-                <Link
-                  href="/login?next=%2Fresume"
+                <a
+                  href="/resume.pdf"
+                  download="Maheshwar-Rao-Bandi-Resume.pdf"
                   className="group from-accent to-accent-2 relative overflow-hidden rounded-full bg-gradient-to-r px-8 py-4 text-center font-mono text-xs tracking-[0.16em] text-white uppercase transition-transform duration-300 hover:scale-[1.03]"
                 >
                   <span className="from-accent-2 to-accent-3 absolute inset-0 -translate-x-full bg-gradient-to-r transition-transform duration-500 ease-out group-hover:translate-x-0" />
@@ -99,7 +101,7 @@ export default function ContactPage() {
                       ↓
                     </span>
                   </span>
-                </Link>
+                </a>
                 <span className="text-fg/30 text-center font-mono text-[10px] tracking-[0.14em] uppercase">
                   PDF · No account needed
                 </span>

@@ -6,9 +6,9 @@ export default function robots() {
       {
         userAgent: "*",
         allow: "/",
-        // The gate and everything behind it. Crawlers can't complete the form,
-        // and indexing these would only dilute the portfolio's own ranking.
-        disallow: ["/login", "/resume", "/visitors"],
+        // The web résumé repeats the portfolio's content, and /visitors is
+        // private; indexing either would only dilute the portfolio's ranking.
+        disallow: ["/resume", "/visitors"],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,

@@ -126,7 +126,7 @@ export const projects = [
     org: "Personal",
     period: "2026",
     description:
-      "This site. A Next.js and React front end with a streaming AI chat assistant that answers as me, recruiter sign-in with a gated résumé, nonce-based CSP headers, and technical SEO. First shipped on Google Cloud — Cloud Run via Cloud Build, Firestore, and Gemini on Vertex AI — and now running on Cloudflare Workers with D1 and Workers AI.",
+      "This site. A Next.js and React front end with a streaming AI chat assistant that answers as me, an admin-only visitors view, nonce-based CSP headers, and technical SEO. First shipped on Google Cloud — Cloud Run via Cloud Build, Firestore, and Gemini on Vertex AI — and now running on Cloudflare Workers with D1 and Workers AI.",
     // Verbatim résumé bullets, used by the downloadable PDF.
     bullets: [
       "Built a portfolio site with an AI chatbot: Next.js and React front end, streaming Gemini chat API, Firestore, recruiter sign-in with a gated resume, CSP headers, and technical SEO, deployed on Cloud Run via Cloud Build.",

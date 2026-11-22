@@ -14,7 +14,7 @@ export async function cloudflare() {
   return getCloudflareContext({ async: true });
 }
 
-/** The D1 database holding sign-ins and chat transcripts. */
+/** The D1 database holding chat transcripts and past sign-ins. */
 export async function database() {
   const { env } = await cloudflare();
   if (!env.DB) {

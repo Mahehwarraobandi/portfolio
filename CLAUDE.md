@@ -40,8 +40,8 @@
 - Runs on **Cloudflare Workers** via `@opennextjs/cloudflare`; config in
   `wrangler.jsonc`, adapter config in `open-next.config.mjs` (passed with
   `--openNextConfigPath` because OpenNext only auto-detects a `.ts` file).
-- D1 (`DB` binding, schema in `migrations/`) stores sign-ins and chat
-  transcripts; Workers AI (`AI` binding) runs the chatbot. Bindings are read
+- D1 (`DB` binding, schema in `migrations/`) stores chat transcripts (and
+  past recruiter sign-ins — the sign-in gate was removed 2026-11-22); Workers AI (`AI` binding) runs the chatbot. Bindings are read
   through `src/lib/cloudflare.js`.
 - Secrets are Worker secrets (`wrangler secret put`), never in files.
 - Deploy with `npm run deploy` from this machine (the user chose direct

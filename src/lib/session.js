@@ -1,17 +1,15 @@
 import crypto from "node:crypto";
 
 /**
- * Visitor sessions.
+ * Admin session for the private /visitors page.
  *
- * A visitor who signs in gets an HttpOnly cookie holding a small JSON payload
+ * Entering the admin key sets an HttpOnly cookie holding a small JSON payload
  * plus an HMAC over it. Nothing secret lives in the cookie — it only asserts
- * "this browser completed the sign-in form", so the signature exists to stop
+ * "this browser entered the admin key", so the signature exists to stop
  * someone hand-crafting one, not to hide the contents.
  */
 
-export const SESSION_COOKIE = "portfolio_visitor";
 export const ADMIN_COOKIE = "portfolio_admin";
-const MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days
 const ADMIN_MAX_AGE_SECONDS = 60 * 60 * 12; // 12 hours
 
 /**
@@ -52,11 +50,6 @@ function issue(payload, maxAgeSeconds) {
   return `${payloadB64}.${sign(payloadB64)}`;
 }
 
-/** Builds a signed token for a visitor. */
-export function createSessionToken({ name, email }) {
-  return issue({ scope: "visitor", name, email }, MAX_AGE_SECONDS);
-}
-
 /** Builds a short-lived signed token proving the owner entered the admin key. */
 export function createAdminToken() {
   return issue({ scope: "admin" }, ADMIN_MAX_AGE_SECONDS);
@@ -64,7 +57,7 @@ export function createAdminToken() {
 
 /**
  * Returns the payload if the token is authentic and unexpired, else null.
- * `scope` must match so a visitor cookie can never be replayed as an admin one.
+ * `scope` must match, so a token minted for one purpose can't be replayed as another.
  */
 export function readToken(token, scope) {
   if (typeof token !== "string" || !token.includes(".")) return null;
@@ -90,11 +83,6 @@ export function readToken(token, scope) {
   }
 }
 
-/** Reads a visitor cookie. */
-export function readSessionToken(token) {
-  return readToken(token, "visitor");
-}
-
 /** Reads an admin cookie. */
 export function readAdminToken(token) {
   return readToken(token, "admin");
@@ -114,18 +102,7 @@ export function checkAdminKey(submitted) {
   return crypto.timingSafeEqual(a, b);
 }
 
-/** Options for `cookies().set()` — HttpOnly, Secure in production, Lax. */
-export function sessionCookieOptions() {
-  return {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: MAX_AGE_SECONDS,
-  };
-}
-
-/** Same, but scoped tightly to the admin area and expiring far sooner. */
+/** Options for the admin cookie — HttpOnly, Strict, scoped to /visitors. */
 export function adminCookieOptions() {
   return {
     httpOnly: true,

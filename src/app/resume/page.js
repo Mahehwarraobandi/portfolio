@@ -1,9 +1,6 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Ambient from "@/components/Ambient";
 import ThemeToggle from "@/components/ThemeToggle";
-import { SESSION_COOKIE, readSessionToken } from "@/lib/session";
 import {
   education,
   experience,
@@ -15,8 +12,9 @@ import {
 
 export const metadata = {
   title: "Résumé",
-  // Gated content — keep it out of the index so the public portfolio ranks instead.
-  robots: { index: false, follow: false },
+  // Open to everyone, but kept out of the index so it doesn't compete with the
+  // portfolio pages, which carry the same content, in search results.
+  robots: { index: false, follow: true },
 };
 
 function SectionTitle({ children }) {
@@ -43,14 +41,7 @@ function Bullets({ items }) {
   );
 }
 
-export default async function ResumePage() {
-  const cookieStore = await cookies();
-  const session = readSessionToken(cookieStore.get(SESSION_COOKIE)?.value);
-
-  // The gate. Rendering is the security boundary here — there is no other
-  // route to this content.
-  if (!session) redirect("/login?next=%2Fresume");
-
+export default function ResumePage() {
   return (
     <main className="relative min-h-svh overflow-hidden">
       <Ambient variant="top" />
@@ -64,12 +55,7 @@ export default async function ResumePage() {
           >
             ← Portfolio
           </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-fg/35 hidden font-mono text-[10px] tracking-[0.16em] uppercase sm:inline">
-              Signed in as {session.name}
-            </span>
-            <ThemeToggle />
-          </div>
+          <ThemeToggle />
         </header>
 
         <div className="mb-12">

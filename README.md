@@ -1,7 +1,7 @@
 # Maheshwar Rao Bandi — Portfolio
 
-Personal portfolio with an AI chat assistant, a recruiter sign-in gate in front
-of the résumé, and a private visitors view. Next.js 16 (App Router, JavaScript),
+Personal portfolio with an AI chat assistant, an open résumé (web page and
+PDF), and a private, admin-key-protected visitors view. Next.js 16 (App Router, JavaScript),
 Tailwind CSS v4, and `motion`, running on **Cloudflare Workers** through the
 OpenNext adapter.
 

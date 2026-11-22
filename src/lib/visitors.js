@@ -1,7 +1,10 @@
 import { database } from "@/lib/cloudflare";
 
 /**
- * Visitor and chat-transcript storage, on Cloudflare D1 (SQLite).
+ * Chat-transcript and visitor storage, on Cloudflare D1 (SQLite).
+ *
+ * The recruiter sign-in gate was removed on 2026-11-22, so nothing writes new
+ * visitors any more; /visitors still lists the ones recorded before that.
  *
  * The Worker reaches the database through its `DB` binding — there is no
  * connection string or password anywhere. Locally, `next dev` gets the same
@@ -36,50 +39,6 @@ function toChat(row) {
     userAgent: row.user_agent,
     createdAt: row.created_at,
   };
-}
-
-/**
- * Persists one sign-in.
- *
- * Failures are surfaced to the caller rather than swallowed — a lead that
- * silently vanishes is worse than an error the visitor can retry.
- */
-export async function recordVisitor(visitor) {
-  const record = {
-    id: crypto.randomUUID(),
-    name: visitor.name,
-    email: visitor.email,
-    company: visitor.company || null,
-    role: visitor.role || null,
-    emailKind: visitor.emailKind || null,
-    emailDomain: visitor.emailDomain || null,
-    referrer: visitor.referrer || null,
-    userAgent: visitor.userAgent || null,
-    createdAt: new Date().toISOString(),
-  };
-
-  const db = await database();
-  await db
-    .prepare(
-      `INSERT INTO visitors
-         (id, name, email, company, role, email_kind, email_domain, referrer, user_agent, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    )
-    .bind(
-      record.id,
-      record.name,
-      record.email,
-      record.company,
-      record.role,
-      record.emailKind,
-      record.emailDomain,
-      record.referrer,
-      record.userAgent,
-      record.createdAt,
-    )
-    .run();
-
-  return record;
 }
 
 /** Most recent sign-ins first. Used by the private /visitors page. */

@@ -1,7 +1,7 @@
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-// Public, indexable pages only. /login, /resume, and /visitors are gated or
-// private, and are excluded here as well as in robots.js.
+// Indexable pages only. /resume duplicates this content and /visitors is
+// private, so both are excluded here as well as in robots.js.
 const routes = [
   { path: "", priority: 1 },
   { path: "/about", priority: 0.9 },

@@ -89,10 +89,8 @@ export default function Nav() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          {/* Routes through the sign-in gate, so every download is attributed
-              to a named visitor. */}
           <Link
-            href="/login?next=%2Fresume"
+            href="/resume"
             className="from-accent to-accent-2 hidden rounded-full bg-gradient-to-r px-5 py-2.5 font-mono text-xs tracking-[0.14em] text-white uppercase shadow-[0_8px_30px_-8px_var(--accent-1)] transition-transform duration-300 hover:scale-[1.04] md:inline-block"
           >
             Résumé ↓
@@ -160,7 +158,7 @@ export default function Nav() {
               transition={{ delay: 0.5 }}
             >
               <Link
-                href="/login?next=%2Fresume"
+                href="/resume"
                 onClick={() => setOpen(false)}
                 className="from-accent to-accent-2 block rounded-full bg-gradient-to-r py-4 text-center font-mono text-sm tracking-[0.14em] text-white uppercase"
               >

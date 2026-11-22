@@ -8,7 +8,7 @@ import ScrollProgress from "@/components/ScrollProgress";
  * Chrome shared by every public page.
  *
  * This is a route group, so the folder name adds no URL segment — `/about`
- * stays `/about`. The gated routes (/login, /resume, /visitors) sit outside the
+ * stays `/about`. The standalone routes (/resume, /visitors) sit outside the
  * group deliberately: they carry their own minimal header and should not offer
  * the portfolio nav.
  */

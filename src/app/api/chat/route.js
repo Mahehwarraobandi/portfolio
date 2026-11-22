@@ -7,9 +7,8 @@ import { recordChat } from "@/lib/visitors";
  * The portfolio assistant endpoint.
  *
  * A public, unauthenticated POST that streams the model's reply back as plain
- * text. Because anyone can call it, it is defended the same way the sign-in
- * action is: a per-IP rate limit plus hard input caps, so it can't be driven
- * to run up Workers AI usage.
+ * text. Because anyone can call it, it is defended with a per-IP rate limit
+ * plus hard input caps, so it can't be driven to run up Workers AI usage.
  */
 
 // This route is request-specific and must never be prerendered or cached.
